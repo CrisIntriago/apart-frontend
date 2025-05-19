@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## APART Cliente - README
 
-## Getting Started
+Este proyecto es el frontend de la aplicación **Apart**, construido con **Next.js 14**. Este README te guiará a través de los pasos para configurar y ejecutar el proyecto localmente, así como para desplegarlo en **AWS**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Configuración del Proyecto
+
+### Clonar el Repositorio
+
+Para clonar el repositorio, usa el siguiente comando:
+
+```sh
+git clone <URL_DE_TU_REPOSITORIO>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Variables de Entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Crea un archivo `.env.local` en la raíz del proyecto y agrega las siguientes variables de entorno:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001/api  # O la URL de tu API local
+```
 
-## Learn More
+### Ejecutar el Proyecto en Desarrollo
 
-To learn more about Next.js, take a look at the following resources:
+Para ejecutar el proyecto en desarrollo, usa el siguiente comando:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Datos de Sesión
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+La gestión y validación de los datos de la sesión se realiza de la siguiente manera:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Lado del Cliente
+
+- **[authGuard.tsx](src/components/guards/authGuard.tsx)**: Controla la sesión en el lado del cliente, funcionando como un interceptor basado en los datos persistentes de **accountStore.ts**.
+
+- **[accountStore.ts](src/data/store/accountStore.ts)**: Almacena y persiste la información de sesión en el **localStorage** del navegador.
+
+### Lado del Servidor
+
+- **[authenticationCookiesActions.ts](src/data/serverActions/authenticationCookiesActions.ts)**: Gestiona y devuelve la información de sesión almacenada en cookies en el servidor.
+
+---
+
+## Utilidades
+
+Cuando se establece o elimina una sesión, se recomienda utilizar el utilitario **sessionHandlerUtils.ts** en lugar de interactuar directamente con los manejadores de sesión de forma individual. Los manejadores deben usarse solo como elementos de consulta, dependiendo del contexto en el que se necesite validar la sesión, ya sea del lado del servidor o del cliente.
+
+- **[sessionHandlerUtils.ts](src/utils/sessionHandlerUtils.ts)**: Establece y elimina la sesión de manera centralizada tanto en el cliente como en el servidor.
