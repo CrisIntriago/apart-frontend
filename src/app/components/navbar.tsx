@@ -28,8 +28,10 @@ const Navbar = () => {
           <span>Notificaciones</span>
         </div>
         <div className="flex items-center space-x-1 cursor-pointer">
+          <Link href="/profile" className="flex items-center space-x-1 cursor-pointer hover:underline">
           <User className="w-4 h-4 text-gray-500" />
           <span>Perfil</span>
+        </Link>
         </div>
         <div className="w-8 h-8 rounded-full overflow-hidden border">
           <Image

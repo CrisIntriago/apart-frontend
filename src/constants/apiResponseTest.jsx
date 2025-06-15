@@ -1,4 +1,4 @@
-const learningRoute = [
+export const learningRoute = [
     {
         "id": 1,
         "titulo": "Hola",
@@ -81,7 +81,7 @@ const learningRoute = [
     }
 ];
 
-const lesson = [
+export const lesson = [
     {
         "id": 1,
         "type": "word_ordering",

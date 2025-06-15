@@ -56,7 +56,7 @@ export const config = {
     '/',
     '/sign-in',
     '/sign-up',
-    '/dashboard',
+  //  '/dashboard',
     '/profile',
     '/users',
   ],
