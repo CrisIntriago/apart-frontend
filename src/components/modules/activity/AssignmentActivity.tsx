@@ -1,7 +1,13 @@
+import { Activity } from "@/types/learning_activity";
 import React from "react";
 
-const AssignmentActivity = () => {
+interface AssignmentActivityProps {
+  activityData: Activity;
+  onComplete(): void;
+}
+
+function AssignmentActivity({ activityData, onComplete }: AssignmentActivityProps) {
   return <div>Assignment Activity</div>;
-};
+}
 
 export default AssignmentActivity;

@@ -1,7 +1,12 @@
-
+import { Activity } from "@/types/learning_activity";
 import React from "react";
 
-const DiscussionActivity = () => {
+interface DiscussionActivityProps {
+  activityData: Activity;
+  onComplete(): void;
+}
+
+const DiscussionActivity = ({ activityData, onComplete }: DiscussionActivityProps) => {
   return <div>Discussion Activity</div>;
 };
 

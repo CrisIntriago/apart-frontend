@@ -1,6 +1,12 @@
+import { Activity } from "@/types/learning_activity";
 import React from "react";
 
-const ReadingActivity = () => {
+interface ReadingActivityProps {
+  activityData: Activity;
+  onComplete(): void;
+}
+
+const ReadingActivity = ({ activityData, onComplete }: ReadingActivityProps) => {
   return <div>Reading Activity</div>;
 };
 
