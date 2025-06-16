@@ -3,16 +3,33 @@
 import React, { useState } from "react";
 import { TextField, Button, Divider, Typography, Link } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import { SIGN_UP_ROUTE } from "@/constants/paths";
+import { PATHS } from "@/constants/paths";
+import { useAuthService } from "@/data/api/auth/authService";
+
 
 const LoginPageContent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuthService();
+
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Inicio de sesión:", { email, password });
+    login.mutate(
+      { email, password },
+      {
+        onSuccess: (response) => {
+          console.log("Inicio de sesión exitoso:", response);
+          window.location.href = PATHS.USER_COURSES.ROOT;
+        },
+        onError: (error) => {
+          console.error("Error al iniciar sesión:", error);
+        },
+      }
+    );
   };
+
 
   return (
     <div className="flex flex-col items-center p-8 font-sans min-h-screen bg-white">
@@ -75,7 +92,7 @@ const LoginPageContent = () => {
 
           <Typography variant="body2">
             ¿No tienes una cuenta?{" "}
-            <Link href={SIGN_UP_ROUTE} underline="hover">
+            <Link href={PATHS.REGISTER.STEP_ONE} underline="hover">
               Regístrate
             </Link>
           </Typography>

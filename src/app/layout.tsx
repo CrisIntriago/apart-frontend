@@ -5,6 +5,7 @@ import CustomThemeProvider from "./theme-provider";
 import AuthGuard from "@/components/guards/authGuard";
 import { getSessionStorageCookies } from "@/data/serverActions/authenticationCookiesAction";
 import { headers } from "next/headers";
+import { ClientProvider } from "@/data/api/abstractApiClient";
 
 export const metadata: Metadata = {
   title: "Apart Web App",
@@ -41,10 +42,14 @@ export default async function RootLayout({
             }}
           >
             <AuthGuard>
-              {appContent}
+              <>
+                {appContent}
+              </>
             </AuthGuard>
           </Box>
+
         </CustomThemeProvider>
+
       </body>
     </html>
   );

@@ -36,11 +36,9 @@ export const getSessionStorageCookies = async (): Promise<ISessionStorage> => {
   const cookieStore = cookies()
   const sessionToken = cookieStore.get('sessionToken')
   const uid = cookieStore.get('uid')
-  const embedded = cookieStore.get('embedded')
   return {
     sessionToken: sessionToken?.value || null,
     uid: uid?.value || null,
-    embedded: embedded?.value === 'true',
   }
 }
 

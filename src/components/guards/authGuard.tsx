@@ -1,5 +1,5 @@
 'use client'
-import PATHS, { PUBLIC_ROUTES } from '@/constants/paths'
+import {PATHS,  PUBLIC_ROUTES } from '@/constants/paths'
 import { accountStore, useAccountStore } from '@/data/store/accountStore'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'

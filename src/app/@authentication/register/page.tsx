@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Divider, Typography, Link } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import { SIGN_IN_ROUTE } from "@/constants/paths";
+import { PATHS } from "@/constants/paths";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -71,7 +71,7 @@ const RegisterPage = () => {
 
         <Typography variant="body2" className="mt-6">
           ¿Ya tienes una cuenta?{" "}
-          <Link href={SIGN_IN_ROUTE} underline="hover">
+          <Link href={PATHS.LOGIN} underline="hover">
             Inicia sesión
           </Link>
         </Typography>
