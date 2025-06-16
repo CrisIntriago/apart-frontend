@@ -5,7 +5,7 @@ import { act, useEffect } from "react";
 import {lesson} from "@/constants/apiResponseTest";
 
 
-export default function ActivityModule() {
+export default function ActivityModule( {id} : {id: string}) {
 
 
     // const { data: activityData, refetch } = learningActivityHooks.useGetOne({
