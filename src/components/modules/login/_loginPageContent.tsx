@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { TextField, Button, Divider, Typography, Link } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import { SIGN_UP_ROUTE } from "@/constants/routes";
+import { SIGN_UP_ROUTE } from "@/constants/paths";
 
-const SigninPageContent = () => {
+const LoginPageContent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -85,4 +85,4 @@ const SigninPageContent = () => {
   );
 };
 
-export default SigninPageContent;
+export default LoginPageContent;

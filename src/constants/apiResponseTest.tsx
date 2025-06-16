@@ -1,4 +1,6 @@
-const learningRoute = [
+import { LearningActivityType, Activity, Difficulty } from "@/types/learning_activity";
+
+export const learningRoute = [
     {
         "id": 1,
         "titulo": "Hola",
@@ -81,13 +83,13 @@ const learningRoute = [
     }
 ];
 
-const lesson = [
+export const lesson: Activity[] = [
     {
         "id": 1,
-        "type": "word_ordering",
+        "type": LearningActivityType.MULTIPLE_OPTION_VOCABULARY,
         "title": "El gato",
         "instructions": "Ordena las palabras para conseguir la oración correcta",
-        "difficulty": "easy",
+        "difficulty": Difficulty.Easy,
         "created_at": "2025-06-14T19:28:38.263186Z",
         "payload": {
             "words": [
@@ -102,10 +104,10 @@ const lesson = [
     },
     {
         "id": 2,
-        "type": "matching",
+        "type": LearningActivityType.MULTIPLE_OPTION_VOCABULARY,
         "title": "Los tiempos",
         "instructions": "Selecciona el par de palabras ordenadas",
-        "difficulty": "easy",
+        "difficulty": Difficulty.Hard,
         "created_at": "2025-06-14T19:37:22.191836Z",
         "payload": {
             "pairs": [
@@ -130,10 +132,10 @@ const lesson = [
     },
     {
         "id": 3,
-        "type": "multiple_choice",
+        "type": LearningActivityType.MULTIPLE_OPTION_THEORY,
         "title": "Forma correcta de responder",
-        "instructions": "Cual es la forma correcta de responder la sigueinte pregunta:\r\nDo you like pizza?",
-        "difficulty": "medium",
+        "instructions": "Cual es la forma correcta de responder la siguiente pregunta:\r\nDo you like pizza?",
+        "difficulty": Difficulty.Medium,
         "created_at": "2025-06-14T19:47:19.296450Z",
         "payload": {
             "choices": [

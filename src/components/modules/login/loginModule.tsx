@@ -1,13 +1,13 @@
 'use client';
 import React, { Suspense } from 'react';
-import SigninPageContent from './SigninPageContent';
+import LoginPageContent from './_loginPageContent';
 
-const SigninPage = () => {
+const LoginModule = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <SigninPageContent />
+      <LoginPageContent />
     </Suspense>
   );
 };
 
-export default SigninPage;
+export default LoginModule;
