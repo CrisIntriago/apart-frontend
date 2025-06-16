@@ -6,7 +6,7 @@ const LmsLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <main className="">
-      <UserCoursesPath>{children}</UserCoursesPath>
+      {children}
     </main>
   )
 }

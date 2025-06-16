@@ -22,13 +22,13 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
       pathname !== PATHS.HOME &&
       PUBLIC_ROUTES.includes(pathname)
     ) {
-      router.push(PATHS.HOME)
+      //router.push(PATHS.HOME)
     }
     if (
       !session.uid &&
       !PUBLIC_ROUTES.includes(pathname)
     ) {
-      router.push(PATHS.HOME)
+      //router.push(PATHS.HOME)
     }
   }
 
