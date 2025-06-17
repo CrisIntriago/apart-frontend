@@ -1,7 +1,6 @@
 'use client';
 
 import { Activity, LearningActivityType } from "@/types/learning_activity";
-import { useEffect } from "react";
 import { lesson } from "@/constants/apiResponseTest";
 import ExerciseActivity from "./activity/ExerciseActivity";
 import QuizActivity from "./activity/QuizActivity";
@@ -10,27 +9,17 @@ import ReadingActivity from "./activity/ReadingActivity";
 import AssignmentActivity from "./activity/AssignmentActivity";
 import DiscussionActivity from "./activity/DiscussionActivity";
 
-
 export default function ActivityModule({ id }: { id: string }) {
+    
+    //TO DO - Conseguir la data del backend
+    const activityData: Activity | undefined = lesson.find(
+        (item) => item.id === Number(id)
+    );
 
-
-    // const { data: activityData, refetch } = learningActivityHooks.useGetOne({
-    //     id,
-    //     enabled: !!id,
-    // })
-    const activityData: Activity = lesson[0]; //TO-DO: Tienes que conseguir la data de la
-    // actividad desde el backend
-
-    useEffect(() => {
-        if (activityData) {
-        }
-    }, [activityData])
-
-    const handleActivityUpdate =  () => {
-
-    }
+    const handleActivityUpdate = () => {};
 
     const renderActivity = () => {
+        if (!activityData) return <div>Actividad no encontrada</div>;
         switch (activityData.type) {
             case LearningActivityType.MULTIPLE_OPTION_IMAGE:
                 return <ExerciseActivity activityData={activityData} onComplete={handleActivityUpdate} />;
@@ -47,7 +36,7 @@ export default function ActivityModule({ id }: { id: string }) {
             default:
                 return null;
         }
-    }
+    };
 
     return renderActivity();
 }
