@@ -22,7 +22,7 @@ export default async function RootLayout({
 }>) {
 
   const session = await getSessionStorageCookies()
-  const userIsAuthenticated = false // TODO Implement real authentication check
+  const userIsAuthenticated = true // TODO Implement real authentication check
   const appContent = userIsAuthenticated ? lms : authentication
   const canGoBack = headers().get('x-can-go-back') === '1'
 
