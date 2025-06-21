@@ -7,7 +7,6 @@ import Navbar from "@/components/ui/navbar";
 const DashboardPage = () => {
   return (
     <main className="min-h-screen bg-gray-100 p-6">
-      <Navbar />
       <section className="max-w-4xl mx-auto">
         <h2 className="text-xl font-bold mb-4">Capítulo 1: Presentaciones</h2>
         <div className="bg-white p-6 rounded-xl shadow-md space-y-4">

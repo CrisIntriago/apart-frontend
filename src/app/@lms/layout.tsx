@@ -1,13 +1,16 @@
-'use client'
-import UserCoursesPath from "@/components/guards/userCoursesPathGuard"
+import Navbar from "@/components/ui/navbar";
 
-const LmsLayout = ({ children }: { children: React.ReactNode }) => {
-
-  return (
-    <UserCoursesPath>
-      {children}
-    </UserCoursesPath>
-  )
+interface LayoutProps {
+    children: React.ReactNode;
 }
 
-export default LmsLayout
+const Layout: React.FC<LayoutProps> = ({ children }) => (
+    <div>
+        <Navbar />
+        <main style={{ padding: "2rem" }}>
+            {children}
+        </main>
+    </div>
+);
+
+export default Layout;

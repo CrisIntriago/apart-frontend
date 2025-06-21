@@ -1,21 +1,8 @@
+import Navbar from "@/components/ui/navbar";
+
 const UserProfileContent = () => {
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Encabezado */}
-      <header className="bg-white rounded-t-lg shadow p-6 mb-4 border-b">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Robespierre Triviño</h1>
-            <p className="text-gray-600 text-sm">🇪🇨 Ecuador</p>
-          </div>
-          <nav className="flex space-x-6 border-t sm:border-t-0 pt-4 sm:pt-0">
-            <a href="#" className="text-blue-600 font-semibold border-b-2 border-blue-600 pb-1">Progreso</a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">Compañeros de curso</a>
-            <a href="#" className="text-gray-700 hover:text-blue-600">Manejar membresía</a>
-          </nav>
-        </div>
-      </header>
-
       {/* Cuerpo principal */}
       <section className="grid md:grid-cols-2 gap-6 px-4">
         {/* Curso actual */}

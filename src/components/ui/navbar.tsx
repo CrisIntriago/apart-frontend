@@ -10,7 +10,7 @@ const Navbar = () => {
         <span className="text-xl font-extrabold tracking-wide">APART</span>
 
         <nav className="flex items-center space-x-6 text-sm text-gray-800">
-          <Link href="#" className="flex items-center space-x-1 hover:underline">
+          <Link href="/dashboard" className="flex items-center space-x-1 hover:underline">
             <BookOpen className="w-4 h-4 text-gray-600" />
             <span>Aprender</span>
           </Link>
