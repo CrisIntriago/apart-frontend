@@ -1,6 +1,5 @@
-'use client';
-
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+"use client"
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
@@ -22,6 +21,6 @@ interface CustomThemeProviderProps {
   children: React.ReactNode;
 }
 
-export default function CustomThemeProvider({ children }: CustomThemeProviderProps) {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+export default function ThemeProvider({ children }: CustomThemeProviderProps) {
+  return <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>;
 }

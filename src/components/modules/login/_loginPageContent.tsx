@@ -5,28 +5,35 @@ import { TextField, Button, Divider, Typography, Link } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { PATHS } from "@/constants/paths";
 import { useAuthService } from "@/data/api/auth/authService";
+import { useRouter } from "next/navigation";
+import { setSharedSession } from "@/utils/sessionHandlerUtils";
 
 
 const LoginPageContent = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuthService();
 
+  const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Inicio de sesión:", { email, password });
     login.mutate(
-      { email, password },
-      {
-        onSuccess: (response) => {
+      { username, password }, {
+      onSuccess: (response) => {
+        const accessToken = response.data?.token;
+        const userId = response.data?.user.id;
+        if (accessToken) {
+          setSharedSession({ accessToken, uid: userId });
           console.log("Inicio de sesión exitoso:", response);
-          window.location.href = PATHS.USER_COURSES.ROOT;
-        },
-        onError: (error) => {
-          console.error("Error al iniciar sesión:", error);
-        },
-      }
+        } else {
+          console.error("No access token received in response:", response);
+        }
+      },
+      onError: (error) => {
+        console.error("Error al iniciar sesión:", error);
+      },
+    }
     );
   };
 
@@ -58,8 +65,8 @@ const LoginPageContent = () => {
             type="email"
             variant="outlined"
             fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
 

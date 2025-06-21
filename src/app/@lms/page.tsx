@@ -1,8 +1,7 @@
-import React from "react";
-import LoaderComponent from "@/components/ui/loaderComponent";
+import UserProfileContent from '@/components/modules/profile/UserProfileContent';
 
 export default async function LmsPage() {
     return (
-        <LoaderComponent></LoaderComponent>
+        <UserProfileContent/>
     );
 }

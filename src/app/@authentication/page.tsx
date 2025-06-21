@@ -1,10 +1,7 @@
-const AuthenticationPage: React.FC = () => {
+import LoginModule from "@/components/modules/login/loginModule";
+
+export default async function AuthenticationPage() {
     return (
-        <div>
-            <h1>Authentication Page</h1>
-            <p>Bienvenido a la página de autenticación.</p>
-        </div>
+        <LoginModule/>
     );
 };
-
-export default AuthenticationPage;
