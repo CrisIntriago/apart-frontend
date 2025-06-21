@@ -1,3 +1,4 @@
+"use client"
 import axios, { AxiosRequestConfig } from "axios";
 import {
   QueryClient,
@@ -6,7 +7,7 @@ import {
 import React from "react";
 
 const api = axios.create({
-  baseURL: process.env.BACKEND_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL,
   timeout: 10000,
 });
 
@@ -76,9 +77,23 @@ export async function post<V = any>(requestConfig: RequestConfig): Promise<Apart
         ...requestConfig.config,
       }
     );
+    if (response.status !== 200) {
+      throw {
+        error: response.statusText,
+        status: response.status,
+        data: response.data,
+      };
+    }
     return processSuccessResponse<V>(response.data);
   } catch (error) {
-    return processErrorResponse<V>(error);
+    if (axios.isAxiosError(error)) {
+      throw {
+        error: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+      };
+    }
+    throw error;
   }
 }
 
