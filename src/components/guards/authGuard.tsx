@@ -1,5 +1,5 @@
 'use client'
-import {PATHS,  PUBLIC_ROUTES } from '@/constants/paths'
+import { PATHS, PUBLIC_ROUTES } from '@/constants/paths'
 import { accountStore, useAccountStore } from '@/data/store/accountStore'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -16,30 +16,22 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
   const { session } = useAccountStore()
   const [isHydrated, setIsHydrated] = useState(false)
 
-  const validateValidProfileRoute = async () => {
-    if (
-      (session.uid || session.embedded) &&
-      pathname !== PATHS.HOME &&
-      PUBLIC_ROUTES.includes(pathname)
-    ) {
-      //router.push(PATHS.HOME)
-    }
+  const checkValidRoute = async () => {
     if (
       !session.uid &&
       !PUBLIC_ROUTES.includes(pathname)
     ) {
-      //router.push(PATHS.HOME)
+      router.push(PATHS.HOME)
     }
   }
 
   useEffect(() => {
     if (isHydrated) {
-      validateValidProfileRoute()
+      checkValidRoute()
     }
   }, [pathname, isHydrated])
 
   useEffect(() => {
-    configureKnox()
     if (!isHydrated) {
       accountStore.persist.rehydrate()?.then(() => {
         setIsHydrated(true)
