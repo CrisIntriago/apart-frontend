@@ -4,7 +4,6 @@ import { accountStore, useAccountStore } from '@/data/store/accountStore'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import LoaderComponent from '@/components/ui/loaderComponent'
-import { configureKnox } from '@/data/gateways/knoxGateway'
 
 interface AuthGuardProps {
   children: React.ReactNode
