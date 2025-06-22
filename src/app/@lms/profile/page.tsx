@@ -1,6 +1,4 @@
 import UserProfileContent from '@/components/modules/profile/UserProfileContent';
-import Navbar from '@/components/ui/navbar';
-
 
 export default function ProfilePage() {
   return (

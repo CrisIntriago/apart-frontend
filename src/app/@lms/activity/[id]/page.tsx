@@ -1,6 +1,6 @@
 'use client'
 
-import ActivityModule from "@/components/modules/activityModule"
+import ActivityModule from "@/components/modules/activity/activityModule"
 
 export default function ActivityPage({ params }: { params: { id: string } }) {
   const { id } = params

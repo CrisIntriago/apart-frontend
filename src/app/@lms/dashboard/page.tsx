@@ -2,9 +2,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { learningRoute } from "@/constants/apiResponseTest";
-import Navbar from "@/components/ui/navbar";
 
 const DashboardPage = () => {
+
+
   return (
     <main className="min-h-screen bg-gray-100 p-6">
       <section className="max-w-4xl mx-auto">

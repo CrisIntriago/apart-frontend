@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   lms,
   authentication,
-  children,
 }: Readonly<{
-  children: React.ReactNode;
   authentication: React.ReactNode
   lms: React.ReactNode
 }>) {
