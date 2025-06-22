@@ -7,7 +7,7 @@ const Navbar = () => {
     <header className="w-full border-b bg-white px-6 py-4 flex justify-between items-center">
       
       <div className="flex items-center space-x-8">
-        <span className="text-xl font-extrabold tracking-wide">APART</span>
+        <span className="text-xl font-extrabold tracking-wide text-gray-900">APART</span>
 
         <nav className="flex items-center space-x-6 text-sm text-gray-800">
           <Link href="/dashboard" className="flex items-center space-x-1 hover:underline">

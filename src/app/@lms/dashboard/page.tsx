@@ -20,6 +20,7 @@ const DashboardPage = () => {
   const modules = data?.data ?? [];
 
   return (
+    
     <main className="min-h-screen bg-gray-100 p-6">
       <section className="max-w-4xl mx-auto">
         <h2 className="text-xl font-bold mb-4">Capítulo 1: Presentaciones</h2>

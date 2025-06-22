@@ -7,7 +7,7 @@ const UserProfileContent = () => {
       <section className="grid md:grid-cols-2 gap-6 px-4">
         {/* Curso actual */}
         <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-lg font-semibold mb-4 border-b pb-2">Curso Actual</h2>
+          <h2 className="text-lg font-semibold mb-4 border-b pb-2 text-gray-900 mb-4">Curso Actual</h2>
           <div className="bg-gray-900 text-white rounded-xl p-4">
             <p className="text-sm mb-2">🇺🇸 <span className="font-semibold">Nivel: A1</span></p>
             <p className="text-sm mb-4">
@@ -23,7 +23,7 @@ const UserProfileContent = () => {
 
         {/* Progreso actual */}
         <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center justify-center">
-          <h2 className="text-lg font-semibold mb-4 border-b w-full text-center pb-2">
+          <h2 className="text-lg font-semibold border-b w-full text-center pb-2 text-gray-900 mb-4">
             Tu progreso del curso actual
           </h2>
           {/* Círculo de progreso */}
@@ -46,11 +46,11 @@ const UserProfileContent = () => {
                 strokeDasharray="20, 100"
               />
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center text-xl font-bold">
+            <div className="absolute inset-0 flex items-center justify-center text-xl font-bold text-gray-900">
               20%
             </div>
           </div>
-          <p className="text-sm mb-1">🇺🇸 Nivel A1</p>
+          <p className="text-sm mb-1 text-gray-900">🇺🇸 Nivel A1</p>
           <p className="text-xs text-gray-500 mt-4 flex items-center gap-1">
             <span>📈</span> Vocabulario aprendido
           </p>
