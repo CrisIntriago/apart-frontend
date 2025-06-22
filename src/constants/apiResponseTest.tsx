@@ -86,7 +86,7 @@ export const learningRoute = [
 export const lesson: Activity[] = [
     {
         "id": 1,
-        "type": LearningActivityType.MULTIPLE_OPTION_VOCABULARY,
+        "type": LearningActivityType.MATCH,
         "title": "El gato",
         "instructions": "Ordena las palabras para conseguir la oración correcta",
         "difficulty": Difficulty.Easy,
@@ -104,7 +104,7 @@ export const lesson: Activity[] = [
     },
     {
         "id": 2,
-        "type": LearningActivityType.MULTIPLE_OPTION_VOCABULARY,
+        "type": LearningActivityType.FILL,
         "title": "Los tiempos",
         "instructions": "Selecciona el par de palabras ordenadas",
         "difficulty": Difficulty.Hard,
@@ -132,7 +132,7 @@ export const lesson: Activity[] = [
     },
     {
         "id": 3,
-        "type": LearningActivityType.MULTIPLE_OPTION_THEORY,
+        "type": LearningActivityType.MATCH,
         "title": "Forma correcta de responder",
         "instructions": "Cual es la forma correcta de responder la siguiente pregunta:\r\nDo you like pizza?",
         "difficulty": Difficulty.Medium,
