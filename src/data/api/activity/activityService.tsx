@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { post, ApartResponseApi, get } from "../abstractApiClient";
+import { ApartResponseApi, get } from "../abstractApiClient";
 
 interface SendPogressResponse {
     token: string;
