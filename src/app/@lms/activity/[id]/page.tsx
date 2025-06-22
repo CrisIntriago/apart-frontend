@@ -7,7 +7,7 @@ export default function ActivityPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex-grow container mx-auto flex overflow-hidden">
-      <ActivityModule id={id} />
+      {/* <ActivityModule id={id} /> */}
     </div>
-  )
+  );
 }

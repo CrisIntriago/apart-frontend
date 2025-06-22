@@ -69,21 +69,25 @@ export async function get<V = any>(requestConfig: RequestConfig): Promise<ApartR
 
 export async function post<V = any>(requestConfig: RequestConfig): Promise<ApartResponseApi<V>> {
   try {
+    const axiosConfig: AxiosRequestConfig = {
+      params: requestConfig.queryParameters,
+      ...(requestConfig.config || {}),
+    };
+
     const response = await api.post<V>(
       requestConfig.path,
       requestConfig.body,
-      {
-        params: requestConfig.queryParameters,
-        ...requestConfig.config,
-      }
+      axiosConfig
     );
-    if (response.status !== 200) {
+
+    if (response.status !== 200  && response.status !== 201) {
       throw {
         error: response.statusText,
         status: response.status,
         data: response.data,
       };
     }
+
     return processSuccessResponse<V>(response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {

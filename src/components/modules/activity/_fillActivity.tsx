@@ -1,37 +1,46 @@
+"use client";
+
 import { Activity } from "@/types/learning_activity";
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface FillActivityProps {
-  activityData: Activity;
-  onComplete(): void;
+  activityData: Extract<Activity, { type: "fill_in" }>;
+  onSubmit: (body: { answers: Record<string, string> }) => void;
 }
 
-const FillActivity = ({ activityData, onComplete }: FillActivityProps) => {
-  const [userInput, setUserInput] = useState<string>('');
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserInput(e.target.value);
-  };
+export default function FillActivity({ activityData, onSubmit }: FillActivityProps) {
+  const blanks = activityData.payload.text.match(/{{blank}}/g)?.length || 1;
+  const [answers, setAnswers] = useState<string[]>(Array(blanks).fill(""));
 
   const handleSubmit = () => {
-    console.log("Texto enviado:", userInput);
-    onComplete();
+    const formattedAnswers: Record<string, string> = {};
+    answers.forEach((val, idx) => {
+      formattedAnswers[idx.toString()] = val;
+    });
+    onSubmit({ answers: formattedAnswers });
   };
 
-  return (
+   return (
     <div>
-      <h2>{activityData.title}</h2>
+      <p>{activityData.title}</p>
       <p>{activityData.instructions}</p>
-
-      <input
-        type="text"
-        placeholder="Escribe aquí tu respuesta..."
-        value={userInput}
-        onChange={handleInputChange}
-      />
-      <button onClick={handleSubmit}>Enviar</button>
+      <p>{activityData.payload.text.replaceAll("{{blank}}", "_____")}</p>
+      {answers.map((val, i) => (
+        <input
+          key={i}
+          value={val}
+          placeholder={`Respuesta ${i + 1}`}
+          onChange={(e) => {
+            const newAnswers = [...answers];
+            newAnswers[i] = e.target.value;
+            setAnswers(newAnswers);
+          }}
+          className="block border p-2 my-2 w-full"
+        />
+      ))}
+      <button onClick={handleSubmit} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+        Enviar
+      </button>
     </div>
   );
-};
-
-export default FillActivity;
+}
