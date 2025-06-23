@@ -5,8 +5,7 @@ import profileImage from '../../../public/images/profile.png';
 
 const Navbar = () => {
   return (
-    <header className="w-full border-b bg-white px-6 py-4 flex justify-between items-center">
-      
+    <header className="w-full bg-white px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b-2 border-black">
       <div className="flex items-center space-x-8">
         <span className="text-xl font-extrabold tracking-wide text-black">APART</span>
 
@@ -22,12 +21,11 @@ const Navbar = () => {
         </nav>
       </div>
 
-     
       <div className="flex items-center space-x-6 text-sm text-black">
         <div className="flex items-center space-x-1 cursor-pointer">
           <Bell className="w-5 h-5 text-black" />
           <span className="font-bold">Notificaciones</span>
-        </div> 
+        </div>
         <div className="flex items-center space-x-1 cursor-pointer">
           <Link href="/profile" className="flex items-center space-x-1 cursor-pointer hover:underline">
             <User className="w-5 h-5 text-black" />
@@ -46,6 +44,5 @@ const Navbar = () => {
       </div>
     </header>
   );
-};
-
+}
 export default Navbar;

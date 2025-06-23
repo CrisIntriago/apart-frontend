@@ -20,27 +20,34 @@ export default function FillActivity({ activityData, onSubmit }: FillActivityPro
     onSubmit({ answers: formattedAnswers });
   };
 
-   return (
-    <div>
-      <p>{activityData.title}</p>
-      <p>{activityData.instructions}</p>
-      <p>{activityData.payload.text.replaceAll("{{blank}}", "_____")}</p>
-      {answers.map((val, i) => (
-        <input
-          key={i}
-          value={val}
-          placeholder={`Respuesta ${i + 1}`}
-          onChange={(e) => {
-            const newAnswers = [...answers];
-            newAnswers[i] = e.target.value;
-            setAnswers(newAnswers);
-          }}
-          className="block border p-2 my-2 w-full"
-        />
-      ))}
-      <button onClick={handleSubmit} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
-        Enviar
-      </button>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#E3E3E3]">
+      <div className="bg-white rounded-xl shadow p-8 w-full max-w-md flex flex-col items-center">
+        <h3 className="text-2xl font-bold text-center mb-2">{activityData.title}</h3>
+        <p className="text-gray-700 text-center mb-6">{activityData.instructions}</p>
+        <p className="text-gray-700 text-center mb-6">{activityData.payload.text}</p>
+        <div className="w-full flex flex-col gap-4 mb-4">
+          {answers.map((val, i) => (
+            <input
+              key={i}
+              value={val}
+              placeholder={`Respuesta ${i + 1}`}
+              onChange={(e) => {
+                const newAnswers = [...answers];
+                newAnswers[i] = e.target.value;
+                setAnswers(newAnswers);
+              }}
+              className="block border p-3 rounded w-full text-lg"
+            />
+          ))}
+        </div>
+        <button
+          onClick={handleSubmit}
+          className="mt-6 bg-white border-black border-2 text-black px-6 py-2 rounded-full font-semibold w-full"
+        >
+          Enviar
+        </button>
+      </div>
     </div>
   );
 }
