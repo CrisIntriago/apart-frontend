@@ -6,7 +6,7 @@ import courseImage from "@images/london.jpg";
 import usaFlag from "@images/usa-flag.png";
 
 const UserProgressInfo = () => {
-  const progress = 20; 
+  const progress = 20;
   const circumference = 100;
   const dashArray = `${progress}, ${circumference}`;
 
@@ -19,8 +19,8 @@ const UserProgressInfo = () => {
           </h2>
           <div className="w-full border-b-2 border-black mb-4"></div>
 
-          <div className="bg-[#3B3939] text-white rounded-lg p-4 mx-28 text-left">
-            <div className="flex items-center mb-2">
+          <div className="bg-[#3B3939] text-white rounded-lg p-4 w-full max-w-xs mx-auto text-center">
+            <div className="flex items-center mb-2 justify-center">
               <Image
                 src={usaFlag}
                 alt="USA Flag"

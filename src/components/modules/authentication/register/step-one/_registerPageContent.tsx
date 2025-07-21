@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, Divider, Link } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import HeaderNavigation from "../HeaderNavigation";
+import HeaderNavigation from "../../HeaderNavigation";
 
 const RegisterPageContent = () => {
   const [email, setEmail] = useState("");

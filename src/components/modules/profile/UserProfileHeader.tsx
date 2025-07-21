@@ -17,7 +17,7 @@ const UserProfileHeader = ({
   ];
 
   return (
-    <div className="bg-white rounded-xl pl-20 flex flex-col items-start gap-4">
+    <div className="bg-white rounded-xl pl-20 flex flex-col items-start gap-4 py-5 drop-shadow-lg">
       <div className="flex items-start gap-6">
         <Image
           src={profileImage}

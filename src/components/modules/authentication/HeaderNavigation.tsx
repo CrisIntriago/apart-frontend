@@ -15,8 +15,8 @@ const HeaderNavigation = () => {
 
       <div className="flex gap-4">
         <Link
-          href="/register"
-          className={`font-medium hover:opacity-80 ${isActive("/register")}`}
+          href="/register/step-one"
+          className={`font-medium hover:opacity-80 ${isActive("/register/step-one")}`}
         >
           Registro
         </Link>
