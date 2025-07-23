@@ -17,7 +17,9 @@ const Navbar = () => {
     <header className="w-full bg-white px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b-2 border-black font-guru">
       
       <div className="flex items-center space-x-8">
-          <h1 className="sm:text-5xl text-3xl font-bold">APART</h1>
+          <Link href="/" className="sm:text-5xl text-3xl font-bold" aria-label="Ir al inicio">
+            APART
+          </Link>
 
         <nav className="hidden md:flex items-center space-x-6 text-sm text-black font-bold">
           <Link
