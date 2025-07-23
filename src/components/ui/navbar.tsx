@@ -32,9 +32,9 @@ const Navbar = () => {
             <span>Aprender</span>
           </Link>
           <Link
-            href="/comunidad"
+            href="/community"
             className={`flex items-center space-x-1 ${
-              isActive("/comunidad") ? "underline" : "hover:underline"
+              isActive("/community") ? "underline" : "hover:underline"
             }`}
           >
             <Users className="w-5 h-5 text-black" />
@@ -83,7 +83,7 @@ const Navbar = () => {
             <BookOpen className="w-5 h-5" />
             <span>Aprender</span>
           </Link>
-          <Link href="/comunidad" className="flex items-center space-x-2 font-bold text-black">
+          <Link href="/community" className="flex items-center space-x-2 font-bold text-black">
             <Users className="w-5 h-5" />
             <span>Comunidad</span>
           </Link>
