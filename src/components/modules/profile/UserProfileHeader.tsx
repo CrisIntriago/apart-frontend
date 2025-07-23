@@ -17,25 +17,26 @@ const UserProfileHeader = ({
   ];
 
   return (
-    <div className="bg-white rounded-xl pl-20 flex flex-col items-start gap-4 py-5 drop-shadow-lg">
-      <div className="flex items-start gap-6">
+    <div className="bg-white rounded-xl px-4 sm:pl-20 flex flex-col items-start gap-4 py-5 drop-shadow-lg w-full">
+      
+      <div className="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start text-center sm:text-left gap-4 sm:gap-6 w-full">
         <Image
           src={profileImage}
           alt="Usuario"
           width={100}
           height={100}
-          className="rounded-full object-cover"
+          className="rounded-full object-cover mx-auto sm:mx-0"
         />
         <div>
-          <h1 className="text-2xl mt-4 font-bold text-gray-900">Carlos Martinez</h1>
-          <p className="text-sm text-gray-600 flex items-center gap-1 mt-1">
+          <h1 className="text-xl sm:text-2xl mt-2 sm:mt-4 font-bold text-gray-900">Carlos Martinez</h1>
+          <p className="text-sm text-gray-600 flex items-center justify-center sm:justify-start gap-1 mt-1">
             <MapPin size={14} />
             <span>Ecuador</span>
           </p>
         </div>
       </div>
 
-      <div className="flex justify-start gap-8 mt-2 w-full pt-2">
+      <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4 sm:gap-8 mt-2 w-full pt-2">
         {menuItems.map((item) => (
           <button
             key={item.key}

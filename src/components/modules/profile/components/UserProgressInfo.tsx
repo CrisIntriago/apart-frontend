@@ -11,8 +11,8 @@ const UserProgressInfo = () => {
   const dashArray = `${progress}, ${circumference}`;
 
   return (
-    <div className="bg-[#E3E3E3] py-8 px-52">
-      <section className="grid md:grid-cols-2 gap-28">
+    <div className="bg-[#E3E3E3] py-8 px-4 sm:px-8 md:px-16 xl:px-52">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-28">
         <div className="bg-white rounded-xl shadow p-4">
           <h2 className="text-base font-semibold text-gray-900 mb-2">
             Curso Actual
@@ -43,19 +43,20 @@ const UserProgressInfo = () => {
               className="rounded-lg object-cover mx-auto my-4"
             />
 
-            <button className="border border-white rounded-full px-20 py-1 text-xs hover:bg-white hover:text-gray-900 transition mx-auto block">
+            <button className="border border-white rounded-full px-12 sm:px-20 py-1 text-xs hover:bg-white hover:text-gray-900 transition mx-auto block">
               Entrar
             </button>
           </div>
         </div>
 
+        {/* Progreso del curso */}
         <div className="bg-white rounded-xl shadow p-4 flex flex-col items-center">
           <h2 className="text-base font-semibold text-gray-900 w-full text-left mb-2">
             Tu progreso del curso actual
           </h2>
           <div className="w-full border-b-2 border-black mb-4"></div>
 
-          <div className="relative w-48 h-48 mb-4">
+          <div className="relative w-40 h-40 sm:w-48 sm:h-48 mb-4">
             <svg
               className="absolute top-0 left-0 w-full h-full"
               viewBox="0 0 36 36"
@@ -74,7 +75,7 @@ const UserProgressInfo = () => {
                 strokeDasharray={dashArray}
               />
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center text-4xl font-extrabold text-gray-900">
+            <div className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl font-extrabold text-gray-900">
               {progress}%
             </div>
           </div>
