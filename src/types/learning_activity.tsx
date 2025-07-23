@@ -7,28 +7,50 @@ export enum LearningActivityType {
     // SHOW_RESULTS = 'SHOW_RESULTS',                             // FR 25
 
 
-    MULTIPLE_OPTION_THEORY = "choice",
+    CHOICE = "choice",
     FILL = "fill_in",
     MATCH = "matching",
     ORDER = "order",
 }
+export type Activity =
+  | {
+      id: number;
+      type: LearningActivityType.FILL;
+      payload: { text: string };
+      title: string;
+      instructions: string;
+      difficulty: string;
+      created_at: string;
+    }
+  | {
+      id: number;
+      type: LearningActivityType.CHOICE;
+      payload: { choices: { id: number; text: string }[]; is_multiple: boolean };
+      title: string;
+      instructions: string;
+      difficulty: string;
+      created_at: string;
+    }
+  | {
+      id: number;
+      type: LearningActivityType.MATCH;
+      payload: { pairs: { left: string; right: string }[] };
+      title: string;
+      instructions: string;
+      difficulty: string;
+      created_at: string;
+    }
+  | {
+      id: number;
+      type: LearningActivityType.ORDER;
+      payload: { words: string[] };
+      title: string;
+      instructions: string;
+      difficulty: string;
+      created_at: string;
+    };
 
-export interface Activity {
-  id: number;
-  type: LearningActivityType; 
-  title: string;
-  instructions: string;
-  difficulty: Difficulty; 
-  created_at: string; 
-  payload: Payload; 
-}
 
-export interface Payload {
-  words?: string[]; 
-  pairs?: { left: string; right: string }[]; 
-  choices?: { id: number; text: string }[]; 
-  is_multiple?: boolean; 
-}
 export enum Difficulty {
   Easy = "easy",
   Medium = "medium",

@@ -1,4 +1,4 @@
-import LoginModule from "@/components/modules/login/loginModule";
+import LoginModule from "@/components/modules/authentication/login/loginModule";
 
 export default async function AuthenticationPage() {
     return (

@@ -7,45 +7,46 @@ import { PATHS } from "@/constants/paths";
 import { useAuthService } from "@/data/api/auth/authService";
 import { useRouter } from "next/navigation";
 import { setSharedSession } from "@/utils/sessionHandlerUtils";
-
+import HeaderNavigation from "../HeaderNavigation";
 
 const LoginPageContent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuthService();
-
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     login.mutate(
-      { username, password }, {
-      onSuccess: (response) => {
-        const accessToken = response.data?.token;
-        const userId = response.data?.user.id;
-        if (accessToken) {
-          setSharedSession({ accessToken, uid: userId });
-          console.log("Inicio de sesión exitoso:", response);
-        } else {
-          console.error("No access token received in response:", response);
-        }
-      },
-      onError: (error) => {
-        console.error("Error al iniciar sesión:", error);
-      },
-    }
+      { username, password },
+      {
+        onSuccess: (response) => {
+          const accessToken = response.data?.token;
+          const userId = response.data?.user.id;
+          if (accessToken) {
+            setSharedSession({ accessToken, uid: userId });
+            console.log("Inicio de sesión exitoso:", response);
+          } else {
+            console.error("No access token received in response:", response);
+          }
+        },
+        onError: (error) => {
+          console.error("Error al iniciar sesión:", error);
+        },
+      }
     );
   };
 
-
   return (
-    <div className="flex flex-col items-center p-8 font-sans min-h-screen bg-white">
-      <header className="w-full flex justify-between items-center border-b px-6 py-4">
-        <h1 className="text-xl font-bold">APART</h1>
-      </header>
+    <div className="flex flex-col items-center p-0 font-sans min-h-screen bg-white">
+      <HeaderNavigation />
+      <div className="w-full border-b-2 border-black"></div>
 
-      <main className="w-full max-w-md mt-12 text-center">
-        <div className="text-5xl mb-4">✦</div>
+      <div className="w-full flex justify-center mt-6 mb-4">
+        <img src="/images/logo.jpg" alt="Logo" className="w-15 h-auto" />
+      </div>
+
+      <main className="w-full max-w-md px-6 text-center">
         <h2 className="text-2xl font-semibold mb-6">Inicia sesión</h2>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -68,6 +69,9 @@ const LoginPageContent = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            InputProps={{
+              style: { backgroundColor: "#E3E3E3" },
+            }}
           />
 
           <TextField
@@ -78,6 +82,9 @@ const LoginPageContent = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            InputProps={{
+              style: { backgroundColor: "#E3E3E3" },
+            }}
           />
 
           <Button
@@ -86,22 +93,27 @@ const LoginPageContent = () => {
             fullWidth
             className="bg-black hover:bg-gray-900 text-white"
           >
-            Iniciar sesión
+            Ingresar
           </Button>
         </form>
 
         <div className="mt-6 space-y-2">
-          <Typography variant="body2">
+          <Typography variant="body1">
             <Link href="#" underline="hover">
-              ¿Olvidaste tu contraseña?
+              <strong>¿Necesitas ayuda para iniciar sesión?</strong>
             </Link>
           </Typography>
 
           <Typography variant="body2">
-            ¿No tienes una cuenta?{" "}
-            <Link href={PATHS.REGISTER.STEP_ONE} underline="hover">
-              Regístrate
-            </Link>
+            Al registrarte, estás creando una cuenta de Apart y aceptas los{" "}
+            <Link href="#" underline="always">
+              Términos
+            </Link>{" "}
+            y la{" "}
+            <Link href="#" underline="always">
+              Política de Privacidad
+            </Link>{" "}
+            de Apart.
           </Typography>
         </div>
       </main>

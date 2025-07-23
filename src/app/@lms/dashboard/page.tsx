@@ -1,55 +1,98 @@
 "use client";
+
+import { AlignJustify } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { learningRoute } from "@/constants/apiResponseTest";
-
+import { useModuleService } from "@/data/api/module/moduleService";
+import LeccionImage from "@images/clip-path.png" 
 const DashboardPage = () => {
+  const courseId = 1;
+  const { getModulesByCourseId } = useModuleService();
+  const { data, isLoading, error } = getModulesByCourseId(courseId);
+
+  if (isLoading) {
+    return <p className="p-6">Cargando módulos...</p>;
+  }
+
+  if (error) {
+    return <p className="p-6 text-red-500">Error al cargar los módulos.</p>;
+  }
+
+  const modules = data?.data ?? [];
+  const progress = 40;
+
   return (
-    
-    <main className="min-h-screen bg-gray-100 p-6">
-      <section className="max-w-3xl mx-auto">
-        <div className="mb-6">
-          <div className="inline-block bg-white px-4 py-2 rounded-lg shadow">
-            <span className="text-sm font-medium text-gray-700">📘 Principiante A1</span>
-          </div>
+    <main className="min-h-screen bg-[#E3E3E3] py-10 px-4 flex justify-center">
+      <section className="w-full max-w-xl space-y-8">
+        <div className="bg-white rounded-xl shadow flex items-center gap-2 px-8 py-3">
+          <AlignJustify size={18} />
+          <span className="text-sm font-semibold text-gray-800">
+            Principiante A1
+          </span>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md">
-          <h2 className="text-lg font-serif font-bold text-gray-900 mb-4">Capítulo 1: Presentaciones</h2>
-          <div className="relative border-l-2 border-black ml-6 space-y-10">
-            {learningRoute.map((activity) => (
-              <Link key={activity.id} href={`/activity/${activity.id}`} className="block group">
-                <div className="flex items-start gap-4 relative pl-6">
-                  {/* Punto con imagen */}
-                  <div className="absolute -left-[22px] top-0 w-11 h-11 rounded-full border-2 border-black overflow-hidden bg-white shadow">
+        <div className="bg-white rounded-xl shadow px-8 py-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">
+            Capítulo 1: Presentaciones
+          </h2>
+
+          <div className="w-full border-black border-2 rounded-full h-4 mb-6 overflow-hidden">
+            <div
+              className="h-full bg-[#996C52]"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+
+          <div className="relative ml-10">
+            <div className="absolute top-0 left-[30px] w-0.5 bg-black h-full z-0"></div>
+
+            <div className="flex flex-col space-y-8">
+              {modules.map((module, index) => (
+                <Link
+                  key={module.id}
+                  href={`/module/${module.id}`}
+                  className="flex items-center gap-4 relative"
+                >
+                  <div className="relative z-10">
                     <Image
-                      src={activity.image}
-                      alt={activity.titulo}
-                      width={44}
-                      height={44}
-                      className="object-cover"
+                      src={module.image || "/default-module-image.png"}
+                      alt={module.name}
+                      width={60}
+                      height={60}
+                      className="rounded-full object-cover border-2 border-black"
                     />
                   </div>
 
-                  {/* Contenido */}
-                  <div className="flex-1">
-                    <h3 className="text-md font-bold text-gray-800 group-hover:underline">{activity.titulo}</h3>
-                    <p className="text-sm text-gray-600">{activity.subtitulo}</p>
+                  <div className="flex flex-col">
+                    <h3 className="text-sm font-bold text-gray-900">
+                      {module.name}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {module.description}
+                    </p>
                   </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
 
-                  {/* Estado */}
-                  <span
-                    className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap self-start ${
-                      activity.status === "COMPLETED"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    {activity.status === "COMPLETED" ? "Completado" : "En progreso"}
-                  </span>
-                </div>
-              </Link>
-            ))}
+        <div className="bg-white rounded-xl shadow px-14 py-4 flex items-center gap-4">
+          <Image
+            src={LeccionImage}
+            alt="Refuerzo del capítulo"
+            width={45}
+            height={45}
+            className="rounded-xl object-cover"
+          />
+
+          <div className="flex flex-col">
+            <h3 className="text-sm font-bold text-gray-900 mb-1">
+              Lección: Refuerzo
+            </h3>
+            <p className="text-sm text-gray-600">
+              Afianza tus conocimientos del capítulo 1 con esta lección extra.
+            </p>
           </div>
         </div>
       </section>
