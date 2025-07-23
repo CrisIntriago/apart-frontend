@@ -3,23 +3,24 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Geist Sans';
-  src: url('/fonts/guru-regular.oft') format('oft');
-  font-weight: 100 900;
-  font-display: swap;
+  font-family: "Guru";
+  src: url("/fonts/guru-regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: 'Geist Mono';
-  src: url('/fonts/guru-regular.oft') format('oft');
-  font-weight: 100 900;
-  font-display: swap;
+  font-family: "Guru";
+  src: url("/fonts/guru-bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
 }
 
-:root {
-  --font-geist-sans: 'Geist Sans', sans-serif;
-  --font-geist-mono: 'Geist Mono', monospace;
+/* Importa la fuente Roboto desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+:root {
+  --font-guru: 'Roboto', sans-serif;
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -34,7 +35,11 @@
 body {
   /* color: var(--foreground);
   background: var(--background); */
-  font-family: var(--font-geist-sans);
+  font-family: "Roboto", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Guru", "Roboto", sans-serif; 
 }
 
 @layer utilities {

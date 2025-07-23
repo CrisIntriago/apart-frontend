@@ -14,12 +14,12 @@ const Navbar = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="w-full bg-white px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b-2 border-black">
+    <header className="w-full bg-white px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b-2 border-black font-guru">
       
       <div className="flex items-center space-x-8">
-        <span className="text-xl font-extrabold tracking-wide text-black">
-          APART
-        </span>
+          <Link href="/" className="sm:text-5xl text-3xl font-bold" aria-label="Ir al inicio">
+            APART
+          </Link>
 
         <nav className="hidden md:flex items-center space-x-6 text-sm text-black font-bold">
           <Link

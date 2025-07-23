@@ -32,15 +32,43 @@ export default function OrderActivity({ activityData, onSubmit }: OrderActivityP
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#E3E3E3]">
-      <div className="bg-white rounded-xl shadow p-8 w-full max-w-md flex flex-col items-center">
-        <h3 className="text-2xl font-bold text-center mb-2">{activityData.title}</h3>
-        <p className="text-gray-700 text-center mb-6">{activityData.instructions}</p>
-        <ul className="space-y-2 mt-4 w-full">
+    <div className="min-h-screen flex items-center justify-center bg-black p-4">
+  <div className="bg-gray-900 rounded-xl shadow-lg w-full max-w-4xl flex flex-col md:flex-row border border-gray-700">
+    {/* Columna izquierda - Imagen (30% del ancho) */}
+    <div className="w-full md:w-2/5 h-64 md:h-auto bg-gray-800 relative">
+      <img 
+        src="https://picsum.photos/800/600?random=40"
+        alt="Educational activity"
+        className="absolute inset-0 w-full h-full object-cover rounded-tl-xl rounded-bl-xl opacity-90"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = "";
+        }}
+      />
+    </div>
+
+    {/* Columna derecha - Contenido (70% del ancho) */}
+    <div className="w-full md:w-3/5 p-6 flex flex-col">
+      {/* Barra superior con botón Back */}
+      <div className="flex justify-between items-center mb-6">
+        <button className="flex items-center text-gray-300 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+          </svg>
+          Back
+        </button>
+      </div>
+
+      {/* Contenido principal */}
+      <div className="flex-grow">
+        <p className="text-lg text-gray-300 mb-8">{activityData.instructions}</p>
+        
+        {/* Lista de palabras para ordenar */}
+        <ul className="space-y-3 w-full mb-6">
           {order.map((word, index) => (
             <li
               key={index}
-              className="border p-3 rounded bg-gray-100 shadow cursor-move text-center text-lg font-medium"
+              className="border-2 border-gray-700 p-3 rounded-lg bg-gray-800 cursor-move text-center text-gray-200 text-lg font-medium transition-colors hover:bg-gray-700 hover:border-gray-600"
               draggable
               onDragStart={() => handleDragStart(index)}
               onDragOver={handleDragOver}
@@ -50,13 +78,17 @@ export default function OrderActivity({ activityData, onSubmit }: OrderActivityP
             </li>
           ))}
         </ul>
+
+        {/* Botón de enviar */}
         <button
           onClick={handleSubmit}
-          className="mt-6 bg-white border-black border-2 text-black px-6 py-2 rounded-full font-semibold w-full"
+          className="mt-4 bg-transparent border-2 border-blue-500 text-blue-500 px-6 py-3 rounded-full font-semibold w-full hover:bg-blue-500 hover:text-white transition-colors"
         >
           Enviar
         </button>
       </div>
     </div>
+  </div>
+</div>
   );
 }
