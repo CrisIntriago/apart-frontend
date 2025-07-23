@@ -17,7 +17,7 @@ const Navbar = () => {
     <header className="w-full bg-white px-6 py-4 flex justify-between items-center sticky top-0 z-50 border-b-2 border-black font-guru">
       
       <div className="flex items-center space-x-8">
-          <Link href="/" className="sm:text-5xl text-3xl font-bold" aria-label="Ir al inicio">
+          <Link href="/" className="text-3xl sm:text-4xl font-bold" aria-label="Ir al inicio">
             APART
           </Link>
 
@@ -32,9 +32,9 @@ const Navbar = () => {
             <span>Aprender</span>
           </Link>
           <Link
-            href="/comunidad"
+            href="/community"
             className={`flex items-center space-x-1 ${
-              isActive("/comunidad") ? "underline" : "hover:underline"
+              isActive("/community") ? "underline" : "hover:underline"
             }`}
           >
             <Users className="w-5 h-5 text-black" />
@@ -83,7 +83,7 @@ const Navbar = () => {
             <BookOpen className="w-5 h-5" />
             <span>Aprender</span>
           </Link>
-          <Link href="/comunidad" className="flex items-center space-x-2 font-bold text-black">
+          <Link href="/community" className="flex items-center space-x-2 font-bold text-black">
             <Users className="w-5 h-5" />
             <span>Comunidad</span>
           </Link>

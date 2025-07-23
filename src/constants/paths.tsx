@@ -10,6 +10,7 @@ const PATHS = {
   INCOMPLETE_REGISTRATION: '/incomplete-registration',
   USER_COURSES: {
     ROOT: '/dashboard',
+    COMMUNITY: '/community',
     PROFILE: '/profile',
     LEARNING_TYPE: {
       ROOT: '/learning_type',
