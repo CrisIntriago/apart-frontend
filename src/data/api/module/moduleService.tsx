@@ -9,7 +9,7 @@ export interface ModuleResponse {
 }
 
 export function useModuleService() {
-  const getModulesByCourseId = (courseId: number) =>
+  const useModulesByCourseId = (courseId: number) =>
     useQuery<ApartResponseApi<ModuleResponse[]>, unknown>({
       queryKey: ['modules', courseId],
       queryFn: async () => {
@@ -22,6 +22,6 @@ export function useModuleService() {
     });
 
   return {
-    getModulesByCourseId,
+    getModulesByCourseId: useModulesByCourseId,
   };
 }
