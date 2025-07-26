@@ -26,7 +26,7 @@ const VerifyUser = () => {
           variant="contained"
           fullWidth
           className="bg-black text-white"
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/profile")}
         >
           Iniciar Sesión
         </Button>
