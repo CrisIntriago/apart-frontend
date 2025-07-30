@@ -2,12 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import { post, ApartResponseApi } from "../abstractApiClient";
 
 interface LoginPayload {
-    username: string;
+    email: string;
     password: string;
 }
 
 interface RegisterPayload {
-    username: string;
+    email: string;
     password: string;
 }
 
@@ -22,7 +22,7 @@ export function useAuthService() {
             const response = await post<AuthResponse>({
                 path: "/auth/login/",
                 body: {
-                    username: payload.username,
+                    email: payload.email,
                     password: payload.password,
                 },
             });
@@ -34,7 +34,7 @@ export function useAuthService() {
             post<AuthResponse>({
                 path: "/auth/register",
                 body: {
-                    username: payload.username,
+                    email: payload.email,
                     password: payload.password,
                 },
             }),

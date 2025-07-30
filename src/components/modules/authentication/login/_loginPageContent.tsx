@@ -10,7 +10,7 @@ import { setSharedSession } from "@/utils/sessionHandlerUtils";
 import HeaderNavigation from "../HeaderNavigation";
 
 const LoginPageContent = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuthService();
   const router = useRouter();
@@ -18,7 +18,7 @@ const LoginPageContent = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     login.mutate(
-      { username, password },
+      { email, password },
       {
         onSuccess: (response) => {
           const accessToken = response.data?.token;
@@ -66,8 +66,8 @@ const LoginPageContent = () => {
             type="email"
             variant="outlined"
             fullWidth
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             InputProps={{
               style: { backgroundColor: "#E3E3E3" },
