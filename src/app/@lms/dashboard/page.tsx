@@ -4,7 +4,7 @@ import { AlignJustify } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useModuleService } from "@/data/api/module/moduleService";
-import LeccionImage from "@images/clip-path.png" 
+import LeccionImage from "@images/clip-path.png";
 const DashboardPage = () => {
   const courseId = 1;
   const { getModulesByCourseId } = useModuleService();
@@ -44,14 +44,14 @@ const DashboardPage = () => {
           </div>
 
           <div className="relative ml-10">
-            <div className="absolute top-0 left-[30px] w-0.5 bg-black h-full z-0"></div>
+            <div className="absolute top-0 left-[40px] w-0.5 bg-black h-full z-0"></div>
 
             <div className="flex flex-col space-y-8">
               {modules.map((module, index) => (
                 <Link
                   key={module.id}
                   href={`/module/${module.id}`}
-                  className="flex items-center gap-4 relative"
+                  className="flex items-center gap-4 relative bg-white p-3 rounded-xl transition duration-300 ease-in-out hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02]"
                 >
                   <div className="relative z-10">
                     <Image
