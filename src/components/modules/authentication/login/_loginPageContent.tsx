@@ -12,11 +12,14 @@ import HeaderNavigation from "../HeaderNavigation";
 const LoginPageContent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const { login } = useAuthService();
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
+
     login.mutate(
       { email, password },
       {
@@ -32,6 +35,7 @@ const LoginPageContent = () => {
         },
         onError: (error) => {
           console.error("Error al iniciar sesión:", error);
+          setErrorMessage("Usuario o contraseña incorrectos");
         },
       }
     );
@@ -95,6 +99,12 @@ const LoginPageContent = () => {
           >
             Ingresar
           </Button>
+
+          {errorMessage && (
+            <Typography variant="body2" color="error" className="mt-2">
+              {errorMessage}
+            </Typography>
+          )}
         </form>
 
         <div className="mt-6 space-y-2">

@@ -13,7 +13,7 @@ const VerifyUser = () => {
     <LayoutRegister>
       <div className="bg-white px-6 py-10 rounded-xl shadow-md text-center space-y-6 max-w-md mx-auto">
         <Typography variant="h5" className="font-bold">
-          Verifica tu cuenta
+          Tu cuenta ha sido creada exitosamente. Por favor, verifica tu correo electrónico.
         </Typography>
 
         <Typography className="text-sm text-gray-600">
@@ -26,7 +26,7 @@ const VerifyUser = () => {
           variant="contained"
           fullWidth
           className="bg-black text-white"
-          onClick={() => router.push("/profile")}
+          onClick={() => router.push("/")}
         >
           Iniciar Sesión
         </Button>

@@ -11,40 +11,17 @@ import {
 import { useRegister } from "@/context/RegisterContext";
 import { useState, useEffect } from "react";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
+import { useAuthService } from "@/data/api/auth/authService";
 
 const countryOptions = [
-  "Argentina",
-  "Bolivia",
-  "Brasil",
-  "Chile",
-  "Colombia",
-  "Costa Rica",
-  "Cuba",
-  "Ecuador",
-  "El Salvador",
-  "España",
-  "Guatemala",
-  "Honduras",
-  "México",
-  "Nicaragua",
-  "Panamá",
-  "Paraguay",
-  "Perú",
-  "Uruguay",
-  "Venezuela",
+  "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba",
+  "Ecuador", "El Salvador", "España", "Guatemala", "Honduras", "México",
+  "Nicaragua", "Panamá", "Paraguay", "Perú", "Uruguay", "Venezuela",
 ];
 
 const languageOptions = [
-  "Español",
-  "Inglés",
-  "Francés",
-  "Alemán",
-  "Italiano",
-  "Portugués",
-  "Ruso",
-  "Japonés",
-  "Chino",
-  "Árabe",
+  "Español", "Inglés", "Francés", "Alemán", "Italiano", "Portugués", "Ruso",
+  "Japonés", "Chino", "Árabe",
 ];
 
 const LanguageSelector = ({
@@ -79,7 +56,8 @@ const LanguageSelector = ({
             size="small"
             onClick={() => handleToggleLanguage(lang)}
             disabled={
-              !selectedLanguages.includes(lang) && selectedLanguages.length >= 3
+              !selectedLanguages.includes(lang) &&
+              selectedLanguages.length >= 3
             }
             className="normal-case"
           >
@@ -105,30 +83,50 @@ const LanguageSelector = ({
 const StepTwo = () => {
   const router = useRouter();
   const { formData, setFormData } = useRegister();
-  const [preview, setPreview] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (formData.image) {
-      const objectUrl = URL.createObjectURL(formData.image);
-      setPreview(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
-    } else {
-      setPreview(null);
-    }
-  }, [formData.image]);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    setFormData((prev) => ({ ...prev, image: file }));
-  };
+  const [errorMessage, setErrorMessage] = useState("");
+  const { register } = useAuthService();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.languages.split(",").filter((l) => l).length < 1) {
-      alert("Selecciona al menos un idioma.");
+
+    const selectedLanguages = formData.languages
+      .split(",")
+      .map((l) => l.trim())
+      .filter(Boolean);
+
+    if (selectedLanguages.length < 1) {
+      setErrorMessage("Selecciona al menos un idioma.");
       return;
     }
-    router.push("/register/verify-user");
+
+    setErrorMessage("");
+
+    const payload = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      national_id: "00000000",
+      country: formData.country,
+      date_of_birth: formData.birthDate,
+      languages: selectedLanguages,
+    };
+
+    console.log("Payload to register:", payload);
+    register.mutate(payload, {
+      onSuccess: (response) => {
+        const token = response.data?.token;
+        if (token) {
+          router.push("/register/verify-user");
+        } else {
+          setErrorMessage("Hubo un error al registrarte. Intenta nuevamente.");
+        }
+      },
+      onError: () => {
+        setErrorMessage("Hubo un error al registrarte. Inténtalo más tarde.");
+      },
+    });
   };
 
   const handleBack = () => {
@@ -166,7 +164,10 @@ const StepTwo = () => {
                 required
                 value={formData.lastName}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, lastName: e.target.value }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    lastName: e.target.value,
+                  }))
                 }
                 InputProps={{ style: { backgroundColor: "#E3E3E3" } }}
               />
@@ -190,7 +191,10 @@ const StepTwo = () => {
                 options={countryOptions}
                 value={formData.country}
                 onChange={(_, newValue) =>
-                  setFormData((prev) => ({ ...prev, country: newValue ?? "" }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    country: newValue ?? "",
+                  }))
                 }
                 renderInput={(params) => (
                   <TextField
@@ -207,7 +211,10 @@ const StepTwo = () => {
             </div>
 
             <LanguageSelector
-              selectedLanguages={formData.languages.split(",").filter((l) => l)}
+              selectedLanguages={formData.languages
+                .split(",")
+                .map((l) => l.trim())
+                .filter(Boolean)}
               onChange={(newLanguages) =>
                 setFormData((prev) => ({
                   ...prev,
@@ -217,32 +224,6 @@ const StepTwo = () => {
             />
           </div>
 
-          <div className="flex flex-col items-center justify-center flex-shrink-0 w-full md:w-64">
-            <div
-              className="relative w-40 h-40 bg-[#E3E3E3] rounded-xl overflow-hidden cursor-pointer flex items-center justify-center text-gray-500 hover:opacity-80 transition"
-              onClick={() => document.getElementById("imageInput")?.click()}
-            >
-              {preview ? (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="text-center px-2 text-sm">
-                  Haz clic para subir foto
-                </span>
-              )}
-
-              <input
-                type="file"
-                hidden
-                id="imageInput"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </div>
-          </div>
         </div>
 
         <div className="flex justify-between gap-4 mt-8">
@@ -264,6 +245,16 @@ const StepTwo = () => {
             Finalizar
           </Button>
         </div>
+
+        {errorMessage && (
+          <Typography
+            variant="body2"
+            color="error"
+            className="mt-4 text-center"
+          >
+            {errorMessage}
+          </Typography>
+        )}
       </form>
     </LayoutRegister>
   );

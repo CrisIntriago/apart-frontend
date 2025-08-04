@@ -20,7 +20,7 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
       !session.uid &&
       !PUBLIC_ROUTES.includes(pathname)
     ) {
-      router.push(PATHS.HOME)
+      router.push(PATHS.LOGIN)
     }
   }
 
