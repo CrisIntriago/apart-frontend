@@ -1,7 +1,6 @@
-import UserProfileContent from '@/components/modules/profile/UserProfileContent';
+import { PATHS } from "@/constants/paths";
+import { redirect } from "next/navigation";
 
-export default async function LmsPage() {
-    return (
-        <UserProfileContent/>
-    );
+export default function Home() {
+  redirect(PATHS.USER_COURSES.PROFILE);
 }

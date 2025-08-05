@@ -14,7 +14,7 @@ const UserCoursesPath = ({ children }: AuthGuardProps) => {
 
     useEffect(() => {
         if (pathname === PATHS.HOME) {
-            router.push(PATHS.USER_COURSES.ROOT)
+            router.push(PATHS.USER_COURSES.PROFILE)
             console.log("Envío al dashboard desde UserCoursesPathGuard, pathname:", pathname)
         }
     }, [pathname, router])

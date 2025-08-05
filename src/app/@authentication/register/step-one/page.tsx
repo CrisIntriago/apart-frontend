@@ -5,6 +5,7 @@ import { TextField, Button, Divider } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useRegister } from "@/context/RegisterContext";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
+import { PATHS } from "@/constants/paths";
 
 const StepOne = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const StepOne = () => {
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
 
-    router.push("/register/step-two");
+    router.push(PATHS.REGISTER.STEP_TWO);
   };
 
   return (

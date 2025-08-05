@@ -1,5 +1,6 @@
 "use client";
 
+import { PATHS } from "@/constants/paths";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,14 +16,14 @@ const HeaderNavigation = () => {
 
       <div className="flex gap-4">
         <Link
-          href="/register/step-one"
-          className={`font-medium hover:opacity-80 ${isActive("/register/step-one")}`}
+          href={PATHS.REGISTER.STEP_ONE}
+          className={`font-medium hover:opacity-80 ${isActive(PATHS.REGISTER.STEP_ONE)}`}
         >
           Registro
         </Link>
         <Link
-          href="/"
-          className={`font-medium hover:opacity-80 ${isActive("/")}`}
+          href={PATHS.LOGIN}
+          className={`font-medium hover:opacity-80 ${isActive(PATHS.LOGIN)}`}
         >
           Iniciar Sesión
         </Link>

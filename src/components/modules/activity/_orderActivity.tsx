@@ -9,86 +9,67 @@ interface OrderActivityProps {
 }
 
 export default function OrderActivity({ activityData, onSubmit }: OrderActivityProps) {
-  const [order, setOrder] = useState(activityData.payload.words);
-  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [availableWords, setAvailableWords] = useState(activityData.payload.words);
+  const [orderedWords, setOrderedWords] = useState<string[]>([]);
 
-  const handleDragStart = (idx: number) => setDraggedIdx(idx);
-
-  const handleDragOver = (e: React.DragEvent<HTMLLIElement>) => {
-    e.preventDefault();
+  const handleAdd = (word: string) => {
+    setOrderedWords((prev) => [...prev, word]);
+    setAvailableWords((prev) => prev.filter((w) => w !== word));
   };
 
-  const handleDrop = (idx: number) => {
-    if (draggedIdx === null || draggedIdx === idx) return;
-    const updated = [...order];
-    const [moved] = updated.splice(draggedIdx, 1);
-    updated.splice(idx, 0, moved);
-    setOrder(updated);
-    setDraggedIdx(null);
+  const handleRemove = (word: string) => {
+    setAvailableWords((prev) => [...prev, word]);
+    setOrderedWords((prev) => prev.filter((w) => w !== word));
   };
 
   const handleSubmit = () => {
-    onSubmit({ words: order });
+    onSubmit({ words: orderedWords });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black p-4">
-  <div className="bg-gray-900 rounded-xl shadow-lg w-full max-w-4xl flex flex-col md:flex-row border border-gray-700">
-    {/* Columna izquierda - Imagen (30% del ancho) */}
-    <div className="w-full md:w-2/5 h-64 md:h-auto bg-gray-800 relative">
-      <img 
-        src="https://picsum.photos/800/600?random=40"
-        alt="Educational activity"
-        className="absolute inset-0 w-full h-full object-cover rounded-tl-xl rounded-bl-xl opacity-90"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.src = "";
-        }}
-      />
-    </div>
+    <div className="w-full max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md">
+      <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+        {activityData.title}
+      </h3>
+      <p className="text-gray-700 mb-6 text-center">{activityData.instructions}</p>
 
-    {/* Columna derecha - Contenido (70% del ancho) */}
-    <div className="w-full md:w-3/5 p-6 flex flex-col">
-      {/* Barra superior con botón Back */}
-      <div className="flex justify-between items-center mb-6">
-        <button className="flex items-center text-gray-300 hover:text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-          </svg>
-          Back
-        </button>
-      </div>
-
-      {/* Contenido principal */}
-      <div className="flex-grow">
-        <p className="text-lg text-gray-300 mb-8">{activityData.instructions}</p>
-        
-        {/* Lista de palabras para ordenar */}
-        <ul className="space-y-3 w-full mb-6">
-          {order.map((word, index) => (
-            <li
+      <div className="mb-6">
+        <h4 className="text-lg font-semibold text-gray-700 mb-2">Palabras disponibles</h4>
+        <div className="flex flex-wrap gap-2">
+          {availableWords.map((word, index) => (
+            <button
               key={index}
-              className="border-2 border-gray-700 p-3 rounded-lg bg-gray-800 cursor-move text-center text-gray-200 text-lg font-medium transition-colors hover:bg-gray-700 hover:border-gray-600"
-              draggable
-              onDragStart={() => handleDragStart(index)}
-              onDragOver={handleDragOver}
-              onDrop={() => handleDrop(index)}
+              onClick={() => handleAdd(word)}
+              className="px-3 py-2 border border-gray-400 rounded-md text-gray-800 bg-white hover:bg-gray-100 transition"
             >
               {word}
-            </li>
+            </button>
           ))}
-        </ul>
-
-        {/* Botón de enviar */}
-        <button
-          onClick={handleSubmit}
-          className="mt-4 bg-transparent border-2 border-blue-500 text-blue-500 px-6 py-3 rounded-full font-semibold w-full hover:bg-blue-500 hover:text-white transition-colors"
-        >
-          Enviar
-        </button>
+        </div>
       </div>
+
+      <div className="mb-6">
+        <h4 className="text-lg font-semibold text-gray-700 mb-2">Orden seleccionado</h4>
+        <div className="flex flex-wrap gap-2">
+          {orderedWords.map((word, index) => (
+            <button
+              key={index}
+              onClick={() => handleRemove(word)}
+              className="px-3 py-2 border border-black rounded-md text-black bg-gray-100 hover:bg-gray-200 transition"
+            >
+              {word}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <button
+        onClick={handleSubmit}
+        disabled={orderedWords.length === 0}
+        className="w-1/3 mx-auto block bg-white text-black border border-black px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Enviar
+      </button>
     </div>
-  </div>
-</div>
   );
 }

@@ -10,15 +10,18 @@ import { setSharedSession } from "@/utils/sessionHandlerUtils";
 import HeaderNavigation from "../HeaderNavigation";
 
 const LoginPageContent = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const { login } = useAuthService();
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
+
     login.mutate(
-      { username, password },
+      { email, password },
       {
         onSuccess: (response) => {
           const accessToken = response.data?.token;
@@ -32,6 +35,7 @@ const LoginPageContent = () => {
         },
         onError: (error) => {
           console.error("Error al iniciar sesión:", error);
+          setErrorMessage("Usuario o contraseña incorrectos");
         },
       }
     );
@@ -66,8 +70,8 @@ const LoginPageContent = () => {
             type="email"
             variant="outlined"
             fullWidth
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             InputProps={{
               style: { backgroundColor: "#E3E3E3" },
@@ -95,6 +99,12 @@ const LoginPageContent = () => {
           >
             Ingresar
           </Button>
+
+          {errorMessage && (
+            <Typography variant="body2" color="error" className="mt-2">
+              {errorMessage}
+            </Typography>
+          )}
         </form>
 
         <div className="mt-6 space-y-2">
