@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import ActivityModule from "@/components/modules/activity/activityModule";
 import { useActivitiesByModule, useSubmitActivity } from "@/data/api/activity/activityService";
 import ModuleSummary from "./ModuleSummary";
+import { PATHS } from "@/constants/paths";
 
 function ModuleMod({ id }: { id: string }) {
   const courseId = 1;
@@ -35,7 +36,6 @@ function ModuleMod({ id }: { id: string }) {
         },
         onError: (error) => {
           console.error("Error en la petición:", error);
-          alert("Ocurrió un error al enviar la respuesta.");
         },
       }
     );
@@ -49,7 +49,7 @@ function ModuleMod({ id }: { id: string }) {
       <ModuleSummary
         results={results}
         activities={activitiesQuery.data}
-        onBack={() => router.push("/dashboard")}
+        onBack={() => router.push(PATHS.USER_COURSES.ROOT)}
       />
     );
   }

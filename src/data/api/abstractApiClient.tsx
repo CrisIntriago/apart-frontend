@@ -80,7 +80,7 @@ export async function post<V = any>(requestConfig: RequestConfig): Promise<Apart
       axiosConfig
     );
 
-    if (response.status !== 200  && response.status !== 201) {
+    if (response.status !== 200  && response.status !== 201 && response.status !== 204) {
       throw {
         error: response.statusText,
         status: response.status,

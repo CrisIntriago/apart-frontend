@@ -1,7 +1,6 @@
-import LoginModule from "@/components/modules/authentication/login/loginModule";
+import { PATHS } from "@/constants/paths";
+import { redirect } from "next/navigation";
 
-export default async function AuthenticationPage() {
-    return (
-        <LoginModule/>
-    );
-};
+export default function Home() {
+  redirect(PATHS.LOGIN);
+}

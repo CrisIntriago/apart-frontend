@@ -18,7 +18,6 @@ export default async function RootLayout({
   authentication: React.ReactNode;
   lms: React.ReactNode;
 }>) {
-  // TODO: middleware para checkear auth de los endpoints solicitados al backend.
   const session = await getSessionStorageCookies();
   const userIsAuthenticated = session?.sessionToken !== null;
   const appContent = userIsAuthenticated ? lms : authentication;

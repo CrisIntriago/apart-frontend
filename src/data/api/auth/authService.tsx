@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { post, ApartResponseApi } from "../abstractApiClient";
+import { useAccountStore } from "@/data/store/accountStore";
 
 interface LoginPayload {
   email: string;
@@ -24,6 +25,8 @@ interface AuthResponse {
 }
 
 export function useAuthService() {
+  const { session } = useAccountStore();
+
   const loginMutation = useMutation<
     ApartResponseApi<AuthResponse>,
     unknown,
@@ -62,8 +65,25 @@ export function useAuthService() {
       }),
   });
 
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const token = session?.sessionToken;
+      if (!token) throw new Error("Token de sesión no disponible");
+      return await post({
+        path: "/auth/logout/",
+        body: {},
+        config: {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        },
+      });
+    },
+  });
+
   return {
     login: loginMutation,
     register: registerMutation,
+    logout: logoutMutation,
   };
 }

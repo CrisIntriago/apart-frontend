@@ -12,6 +12,7 @@ import { useRegister } from "@/context/RegisterContext";
 import { useState, useEffect } from "react";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
 import { useAuthService } from "@/data/api/auth/authService";
+import { PATHS } from "@/constants/paths";
 
 const countryOptions = [
   "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba",
@@ -118,7 +119,7 @@ const StepTwo = () => {
       onSuccess: (response) => {
         const token = response.data?.token;
         if (token) {
-          router.push("/register/verify-user");
+          router.push(PATHS.REGISTER.VERIFY_USER);
         } else {
           setErrorMessage("Hubo un error al registrarte. Intenta nuevamente.");
         }
@@ -130,7 +131,7 @@ const StepTwo = () => {
   };
 
   const handleBack = () => {
-    router.push("/register/step-one");
+    router.push(PATHS.USER_COURSES.ROOT);
   };
 
   return (
