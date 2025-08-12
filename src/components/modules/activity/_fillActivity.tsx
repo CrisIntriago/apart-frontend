@@ -18,7 +18,6 @@ export default function FillActivity({
 
   const handleSubmit = () => {
     const hasEmpty = answers.some((a) => a.trim() === "");
-    console.log("Submitted answers:", answers);
     if (hasEmpty) {
       setError(true);
       return;

@@ -23,7 +23,6 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
   const { user } = useUser();
 
   const checkValidRoute = async () => {
-    console.log("Verificando ruta válida, pathname para user:", user);
     if (!session.uid && !PUBLIC_ROUTES.includes(pathname)) {
       router.replace(PATHS.LOGIN);
       return;
@@ -45,7 +44,10 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
     ) {
       router.replace(PATHS.NOT_COURSE_ASIGNED);
       return;
-    }
+    } if (user && session.uid && user && user.course && !PROTECTED_ROUTES.includes(pathname)) {
+      router.replace(PATHS.USER_COURSES.PROFILE);
+      return;
+    } 
   };
 
   useEffect(() => {

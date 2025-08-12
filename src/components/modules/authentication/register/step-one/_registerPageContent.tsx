@@ -11,7 +11,6 @@ const RegisterPageContent = () => {
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Registro enviado:", { email, password });
   };
 
   return (

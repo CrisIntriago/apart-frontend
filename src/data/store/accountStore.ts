@@ -14,6 +14,7 @@ const defaultState: IAccountState = {
   session: {
     sessionToken: null,
     uid: null,
+    hasCourse: null,
   },
 };
 

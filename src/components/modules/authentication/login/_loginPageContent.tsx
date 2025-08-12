@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Button, Divider, Typography, Link } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { PATHS } from "@/constants/paths";
@@ -15,7 +15,9 @@ const LoginPageContent = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const { login } = useAuthService();
   const router = useRouter();
-  router.replace(PATHS.LOGIN);
+  useEffect(() => {
+    router.replace(PATHS.LOGIN);
+  }, [router]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,9 +29,11 @@ const LoginPageContent = () => {
         onSuccess: (response) => {
           const accessToken = response.data?.token;
           const userId = response.data?.user.id;
+          const hasCourse =
+            Array.isArray(response.data?.user.courses) &&
+            response.data.user.courses.length > 0;
           if (accessToken) {
-            setSharedSession({ accessToken, uid: userId });
-            console.log("Inicio de sesión exitoso:", response);
+            setSharedSession({ accessToken, uid: userId, hasCourse });
           } else {
             console.error("No access token received in response:", response);
           }

@@ -114,7 +114,6 @@ const StepTwo = () => {
       languages: selectedLanguages,
     };
 
-    console.log("Payload to register:", payload);
     register.mutate(payload, {
       onSuccess: (response) => {
         const token = response.data?.token;

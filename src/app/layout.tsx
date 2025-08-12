@@ -15,14 +15,16 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   lms,
   authentication,
+  no_course
 }: Readonly<{
   authentication: React.ReactNode;
   lms: React.ReactNode;
+  no_course: React.ReactNode;
 }>) {
   const session = await getSessionStorageCookies();
   const userIsAuthenticated = session?.sessionToken !== null;
-  const appContent = userIsAuthenticated ? lms : authentication;
-
+  const hasCourse = session?.hasCourse;
+  const appContent = (userIsAuthenticated && !hasCourse) ? no_course : userIsAuthenticated ? lms : authentication;
   return (
     <html lang="en">
       <body className="antialiased">

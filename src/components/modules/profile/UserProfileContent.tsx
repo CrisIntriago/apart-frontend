@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserProfileHeader from "./UserProfileHeader";
 import UserProgressInfo from "./components/UserProgressInfo";
 import UserClassmatesInfo from "./components/UserClassmatesInfo";
@@ -12,7 +12,9 @@ const UserProfileContent = () => {
   const [activeSection, setActiveSection] = useState("progress");
   const router = useRouter();
   const user = useUser();
-  router.replace(PATHS.USER_COURSES.PROFILE);
+    useEffect(() => {
+    router.replace(PATHS.USER_COURSES.PROFILE);
+  }, [router]);
 
   return (
     <div className="space-y-6">
