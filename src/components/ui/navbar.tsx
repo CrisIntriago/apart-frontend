@@ -1,20 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Bell, BookOpen, Users, User, Menu, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import profileImage from "@images/profile.png";
+import profileImage from "@images/default-profile.png";
 import { useAuthService } from "@/data/api/auth/authService";
 import { removeSessionStorageCookies } from "@/data/serverActions/authenticationCookiesAction";
 import { removeAccountState } from "@/data/store/accountStore";
 import { PATHS } from "@/constants/paths";
+import { useUser } from "@/context/UserContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const { logout } = useAuthService();
+  const { user } = useUser();
 
   const isActive = (path: string) => pathname === path;
 
@@ -52,7 +54,9 @@ const Navbar = () => {
           <Link
             href={PATHS.USER_COURSES.COMMUNITY}
             className={`flex items-center space-x-1 ${
-              isActive(PATHS.USER_COURSES.COMMUNITY) ? "underline" : "hover:underline"
+              isActive(PATHS.USER_COURSES.COMMUNITY)
+                ? "underline"
+                : "hover:underline"
             }`}
           >
             <Users className="w-5 h-5 text-black" />
@@ -69,7 +73,9 @@ const Navbar = () => {
         <Link
           href={PATHS.USER_COURSES.PROFILE}
           className={`hidden md:flex items-center space-x-2 ${
-            isActive(PATHS.USER_COURSES.PROFILE) ? "underline" : "hover:underline"
+            isActive(PATHS.USER_COURSES.PROFILE)
+              ? "underline"
+              : "hover:underline"
           }`}
         >
           <User className="w-5 h-5 text-black" />
@@ -86,8 +92,8 @@ const Navbar = () => {
 
         <div className="w-8 h-8 rounded-full border-gray-700 overflow-hidden border">
           <Image
-            src={profileImage}
-            alt="Foto de perfil"
+            src={user?.photo || profileImage}
+            alt={user ? `${user.first_name} ${user.last_name}` : "Foto de perfil"}
             width={32}
             height={32}
             className="object-cover w-full h-full"

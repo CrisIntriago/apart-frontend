@@ -15,6 +15,7 @@ const LoginPageContent = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const { login } = useAuthService();
   const router = useRouter();
+  router.replace(PATHS.LOGIN);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();

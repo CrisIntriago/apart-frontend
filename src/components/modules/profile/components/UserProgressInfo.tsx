@@ -2,13 +2,20 @@
 
 import Image from "next/image";
 import { TrendingUp } from "lucide-react";
-import courseImage from "@images/london.jpg";
-import usaFlag from "@images/usa-flag.png";
+import { useRouter } from "next/navigation";
+import coursePlaceholder from "@images/london.jpg";
+import flagPlaceholder from "@images/usa-flag.png";
+import { StudentProfile } from "@/types/user";
+import { PATHS } from "@/constants/paths";
 
-const UserProgressInfo = () => {
+const UserProgressInfo = ({ user }: { user: StudentProfile | null }) => {
+  const router = useRouter();
   const progress = 20;
   const circumference = 100;
   const dashArray = `${progress}, ${circumference}`;
+
+  const languageInfo = user?.languages[0];
+  const courseInfo = user?.course;
 
   return (
     <div className="bg-[#E3E3E3] py-8 px-4 sm:px-8 md:px-16 xl:px-52">
@@ -22,34 +29,34 @@ const UserProgressInfo = () => {
           <div className="bg-[#3B3939] text-white rounded-lg p-4 w-full max-w-xs mx-auto text-center">
             <div className="flex items-center mb-2 justify-center">
               <Image
-                src={usaFlag}
-                alt="USA Flag"
+                src={languageInfo?.language.icon || flagPlaceholder}
+                alt={`${languageInfo?.language.name} Flag`}
                 width={20}
                 height={15}
                 className="mr-2 rounded-sm"
               />
-              <p className="text-xs font-semibold">Nivel: A1</p>
+              <p className="text-xs font-semibold">Nivel: {courseInfo?.name}</p>
             </div>
 
-            <p className="text-xs mb-4">
-              Learn English vocabulary and grammar in this comprehensive course
-              for all
-            </p>
+            <p className="text-xs mb-4">{courseInfo?.description}</p>
 
             <Image
-              src={courseImage}
-              alt="Curso de inglés"
+              src={courseInfo?.image || coursePlaceholder}
+              alt={`Imagen del curso ${courseInfo?.name}`}
               width={220}
+              height={150}
               className="rounded-lg object-cover mx-auto my-4"
             />
 
-            <button className="border border-white rounded-full px-12 sm:px-20 py-1 text-xs hover:bg-white hover:text-gray-900 transition mx-auto block">
+            <button
+              onClick={() => router.push(PATHS.USER_COURSES.ROOT)}
+              className="border border-white rounded-full px-12 sm:px-20 py-1 text-xs hover:bg-white hover:text-gray-900 transition mx-auto block"
+            >
               Entrar
             </button>
           </div>
         </div>
 
-        {/* Progreso del curso */}
         <div className="bg-white rounded-xl shadow p-4 flex flex-col items-center">
           <h2 className="text-base font-semibold text-gray-900 w-full text-left mb-2">
             Tu progreso del curso actual
@@ -82,13 +89,15 @@ const UserProgressInfo = () => {
 
           <div className="flex items-center gap-2 mb-8">
             <Image
-              src={usaFlag}
-              alt="USA Flag"
+              src={languageInfo?.language.icon || flagPlaceholder}
+              alt={`${languageInfo?.language.name} Flag`}
               width={20}
               height={15}
               className="rounded-sm"
             />
-            <p className="text-sm font-medium text-gray-900">Nivel A1</p>
+            <p className="text-sm font-medium text-gray-900">
+              {languageInfo?.level}
+            </p>
           </div>
 
           <div className="w-full border-b-2 border-black mb-3"></div>

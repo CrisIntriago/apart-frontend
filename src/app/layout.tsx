@@ -5,6 +5,7 @@ import AuthGuard from "@/components/guards/authGuard";
 import { getSessionStorageCookies } from "@/data/serverActions/authenticationCookiesAction";
 import { ClientProvider } from "@/data/api/abstractApiClient";
 import { RegisterProvider } from "@/context/RegisterContext";
+import { UserProvider } from "@/context/UserContext";
 
 export const metadata: Metadata = {
   title: "Apart Web App",
@@ -23,18 +24,20 @@ export default async function RootLayout({
   const appContent = userIsAuthenticated ? lms : authentication;
 
   return (
-    <RegisterProvider>
-      <ClientProvider>
-        <html lang="en">
-          <body className="antialiased">
-            <CustomThemeProvider>
-              <AuthGuard>
-                <>{appContent}</>
-              </AuthGuard>
-            </CustomThemeProvider>
-          </body>
-        </html>
-      </ClientProvider>
-    </RegisterProvider>
+    <html lang="en">
+      <body className="antialiased">
+        <RegisterProvider>
+          <ClientProvider>
+            <UserProvider>
+              <CustomThemeProvider>
+                <AuthGuard>
+                  <>{appContent}</>
+                </AuthGuard>
+              </CustomThemeProvider>
+            </UserProvider>
+          </ClientProvider>
+        </RegisterProvider>
+      </body>
+    </html>
   );
 }

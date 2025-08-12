@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
-import profileImage from '@images/profile.png';
+import profileImage from "@images/default-profile.png";
+import { useUser } from "@/context/UserContext";
 
 const UserProfileHeader = ({
   activeSection,
@@ -16,22 +17,33 @@ const UserProfileHeader = ({
     { key: "membership", label: "Manejar membresía" },
   ];
 
+  const { user, isLoading } = useUser();
+
+  if (isLoading || !user) {
+    return (
+      <div className="bg-white rounded-xl p-6 text-center drop-shadow-lg w-full">
+        Cargando perfil...
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl px-4 sm:pl-20 flex flex-col items-start gap-4 py-5 drop-shadow-lg w-full">
-      
       <div className="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start text-center sm:text-left gap-4 sm:gap-6 w-full">
         <Image
-          src={profileImage}
-          alt="Usuario"
+          src={user.photo || profileImage}
+          alt={`${user.first_name} ${user.last_name}`}
           width={100}
           height={100}
           className="rounded-full object-cover mx-auto sm:mx-0"
         />
         <div>
-          <h1 className="text-xl sm:text-2xl mt-2 sm:mt-4 font-bold text-gray-900">Carlos Martinez</h1>
+          <h1 className="text-xl sm:text-2xl mt-2 sm:mt-4 font-bold text-gray-900">
+            {user.first_name} {user.last_name}
+          </h1>
           <p className="text-sm text-gray-600 flex items-center justify-center sm:justify-start gap-1 mt-1">
             <MapPin size={14} />
-            <span>Ecuador</span>
+            <span>{user.country}</span>
           </p>
         </div>
       </div>

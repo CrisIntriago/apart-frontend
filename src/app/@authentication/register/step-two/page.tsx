@@ -108,7 +108,7 @@ const StepTwo = () => {
       password: formData.password,
       first_name: formData.firstName,
       last_name: formData.lastName,
-      national_id: "00000000",
+      national_id: formData.email,
       country: formData.country,
       date_of_birth: formData.birthDate,
       languages: selectedLanguages,
@@ -131,7 +131,7 @@ const StepTwo = () => {
   };
 
   const handleBack = () => {
-    router.push(PATHS.USER_COURSES.ROOT);
+    router.push(PATHS.REGISTER.STEP_ONE);
   };
 
   return (
