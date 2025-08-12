@@ -40,7 +40,7 @@ const LoginPageContent = () => {
         },
         onError: (error) => {
           console.error("Error al iniciar sesión:", error);
-          setErrorMessage("Usuario o contraseña incorrectos");
+          setErrorMessage("Correo o contraseña incorrectos");
         },
       }
     );
