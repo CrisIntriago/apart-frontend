@@ -1,20 +1,37 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { TextField, Button, Divider } from "@mui/material";
+import { TextField, Button, Divider, Typography } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useRegister } from "@/context/RegisterContext";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
 import { PATHS } from "@/constants/paths";
+import { useAuthService } from "@/data/api/auth/authService";
+import { useState } from "react";
 
 const StepOne = () => {
   const router = useRouter();
   const { formData, setFormData } = useRegister();
+  const { validateEmail } = useAuthService();
 
-  const handleNext = (e: React.FormEvent) => {
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
 
-    router.push(PATHS.REGISTER.STEP_TWO);
+    try {
+      const res = await validateEmail.mutateAsync({ email: formData.email });
+
+      if (res.data?.exists) {
+        setErrorMessage("Ya existe una cuenta con este correo electrónico.");
+        return;
+      }
+
+      router.push(PATHS.REGISTER.STEP_TWO);
+    } catch (error) {
+      setErrorMessage("Error al validar el correo. Intenta de nuevo.");
+    }
   };
 
   return (
@@ -81,10 +98,17 @@ const StepOne = () => {
           type="submit"
           variant="contained"
           fullWidth
+          disabled={validateEmail.isPending}
           className="bg-black hover:bg-gray-900 text-white"
         >
-          Siguiente
+          {validateEmail.isPending ? "Validando..." : "Siguiente"}
         </Button>
+
+        {errorMessage && (
+          <Typography variant="body2" color="error" sx={{ mt: 1, textAlign: "center" }}>
+            {errorMessage}
+          </Typography>
+        )}
       </form>
     </LayoutRegister>
   );

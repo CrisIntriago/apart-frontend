@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useRegister } from "@/context/RegisterContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
 import { useAuthService } from "@/data/api/auth/authService";
 import { PATHS } from "@/constants/paths";
@@ -83,51 +83,64 @@ const LanguageSelector = ({
 
 const StepTwo = () => {
   const router = useRouter();
-  const { formData, setFormData } = useRegister();
+  const { formData, setFormData, resetFormData } = useRegister();
   const [errorMessage, setErrorMessage] = useState("");
   const { register } = useAuthService();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const selectedLanguages = formData.languages
-      .split(",")
-      .map((l) => l.trim())
-      .filter(Boolean);
+  const selectedLanguages = formData.languages
+    .split(",")
+    .map((l) => l.trim())
+    .filter(Boolean);
 
-    if (selectedLanguages.length < 1) {
-      setErrorMessage("Selecciona al menos un idioma.");
-      return;
-    }
+  if (
+    !formData.firstName ||
+    !formData.lastName ||
+    !formData.birthDate ||
+    !formData.country ||
+    !formData.email ||
+    !formData.password ||
+    !formData.username ||
+    selectedLanguages.length < 1
+  ) {
+    setErrorMessage(
+      "Debes completar todos los campos para registrarte, revisa que todo esté completo."
+    );
+    return;
+  }
 
-    setErrorMessage("");
+  setErrorMessage("");
 
-    const payload = {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      national_id: formData.email,
-      country: formData.country,
-      date_of_birth: formData.birthDate,
-      languages: selectedLanguages,
-    };
-
-    register.mutate(payload, {
-      onSuccess: (response) => {
-        const token = response.data?.token;
-        if (token) {
-          router.push(PATHS.REGISTER.VERIFY_USER);
-        } else {
-          setErrorMessage("Hubo un error al registrarte. Intenta nuevamente.");
-        }
-      },
-      onError: () => {
-        setErrorMessage("Hubo un error al registrarte. Inténtalo más tarde.");
-      },
-    });
+  const payload = {
+    username: formData.username,
+    email: formData.email,
+    password: formData.password,
+    first_name: formData.firstName,
+    last_name: formData.lastName,
+    national_id: formData.email,
+    country: formData.country,
+    date_of_birth: formData.birthDate,
+    languages: selectedLanguages,
   };
+
+  register.mutate(payload, {
+    onSuccess: (response) => {
+      const token = response.data?.token;
+      if (token) {
+        resetFormData(); 
+        router.push(PATHS.REGISTER.VERIFY_USER);
+      } else {
+        setErrorMessage("Hubo un error al registrarte. Intenta nuevamente.");
+      }
+    },
+    onError: () => {
+      setErrorMessage("Hubo un error al registrarte. Inténtalo más tarde.");
+    },
+  });
+};
+
 
   const handleBack = () => {
     router.push(PATHS.REGISTER.STEP_ONE);
@@ -226,7 +239,7 @@ const StepTwo = () => {
 
         </div>
 
-        <div className="flex justify-between gap-4 mt-8">
+        <div className="flex justify-between gap-4 mt-8 mb-4">
           <Button
             variant="outlined"
             fullWidth
@@ -250,7 +263,7 @@ const StepTwo = () => {
           <Typography
             variant="body2"
             color="error"
-            className="mt-4 text-center"
+            className="text-center"
           >
             {errorMessage}
           </Typography>

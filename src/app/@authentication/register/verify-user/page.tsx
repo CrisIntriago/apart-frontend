@@ -3,12 +3,10 @@
 import { useRouter } from "next/navigation";
 import { Button, Typography } from "@mui/material";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
-import { useRegister } from "@/context/RegisterContext";
 import { PATHS } from "@/constants/paths";
 
 const VerifyUser = () => {
   const router = useRouter();
-  const { formData } = useRegister();
 
   return (
     <LayoutRegister>
@@ -18,9 +16,7 @@ const VerifyUser = () => {
         </Typography>
 
         <Typography className="text-sm text-gray-600">
-          Notifica a tu profesor para que te inscriba en el curso correspondiente con el siguiente email: <br />
-          <strong>{formData.email}</strong> para poder acceder a la plataforma.
-          Si ya fuiste inscrito previamente, inicia sesión.
+          Notifica a tu profesor para que te inscriba en el curso correspondiente para poder acceder a la plataforma. Si ya fuiste inscrito previamente, inicia sesión.
         </Typography>
 
         <Button

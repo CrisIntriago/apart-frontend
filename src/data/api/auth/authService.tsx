@@ -81,9 +81,26 @@ export function useAuthService() {
     },
   });
 
+  const validateEmailMutation = useMutation<
+    ApartResponseApi<{ exists: boolean }>,
+    unknown,
+    { email: string }
+  >({
+    mutationFn: async (payload: { email: string }) => {
+      return await post<{ exists: boolean }>({
+        path: "/auth/validate-email/",
+        body: {
+          email: payload.email,
+        },
+      });
+    },
+  });
+
+
   return {
     login: loginMutation,
     register: registerMutation,
     logout: logoutMutation,
+    validateEmail: validateEmailMutation,
   };
 }
