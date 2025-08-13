@@ -2,20 +2,40 @@
 
 import { useRouter } from "next/navigation";
 import { TextField, Button, Divider } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
 import { useRegister } from "@/context/RegisterContext";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
 import { PATHS } from "@/constants/paths";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { useAuthService } from "@/data/api/auth/authService";
+import { useState } from "react";
+import { handleLoginSuccess } from "@/utils/sessionHandlerUtils";
 
 const StepOne = () => {
   const router = useRouter();
   const { formData, setFormData } = useRegister();
+  const { register } = useAuthService();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
 
     router.push(PATHS.REGISTER.STEP_TWO);
   };
+
+  const _handleRegisterGoogle = (credentialResponse: any) => {
+      if (credentialResponse.credential) {
+        register.mutate(
+          { google_token: credentialResponse.credential },
+          {
+            onSuccess: () => handleLoginSuccess,
+            onError: (error) => {
+              console.error("Error al iniciar sesión:", error);
+              setErrorMessage("Correo o contraseña incorrectos");
+            },
+          }
+        );
+      }
+    }
 
   return (
     <LayoutRegister>
@@ -25,16 +45,15 @@ const StepOne = () => {
       >
         <h2 className="text-2xl font-semibold mb-2 text-center">Crea tu cuenta</h2>
 
-        <Button
-          variant="outlined"
-          fullWidth
-          startIcon={<GoogleIcon />}
-          className="normal-case"
-        >
-          Registrarse con Google
-        </Button>
+         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => _handleRegisterGoogle(credentialResponse)}
+              onError={() => console.log('Login Failed')}
+              useOneTap
+            />
+            <Divider className="my-4">o</Divider>
+          </GoogleOAuthProvider>
 
-        <Divider className="my-4">o</Divider>
 
         <TextField
           label="Nombre de usuario"
