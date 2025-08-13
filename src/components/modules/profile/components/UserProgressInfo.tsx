@@ -7,15 +7,20 @@ import coursePlaceholder from "@images/london.jpg";
 import flagPlaceholder from "@images/usa-flag.png";
 import { StudentProfile } from "@/types/user";
 import { PATHS } from "@/constants/paths";
+import { useCourseProgress } from "@/data/api/course/courseService";
 
 const UserProgressInfo = ({ user }: { user: StudentProfile | null }) => {
   const router = useRouter();
-  const progress = 20;
-  const circumference = 100;
-  const dashArray = `${progress}, ${circumference}`;
 
   const languageInfo = user?.languages[0];
   const courseInfo = user?.course;
+
+  const { data: courseProgress } = useCourseProgress(courseInfo?.id ?? 0);
+
+  const progress = courseProgress?.overall?.percent ?? 0;
+  const radius = 15.9155;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (progress / 100) * circumference;
 
   return (
     <div className="bg-[#E3E3E3] py-8 px-4 sm:px-8 md:px-16 xl:px-52">
@@ -68,20 +73,28 @@ const UserProgressInfo = ({ user }: { user: StudentProfile | null }) => {
               className="absolute top-0 left-0 w-full h-full"
               viewBox="0 0 36 36"
             >
-              <path
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              <circle
+                cx="18"
+                cy="18"
+                r="15.9155"
                 fill="none"
                 stroke="#e5e7eb"
                 strokeWidth="2"
               />
-              <path
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831"
+              <circle
+                cx="18"
+                cy="18"
+                r="15.9155"
                 fill="none"
                 stroke="#1f2937"
                 strokeWidth="2"
-                strokeDasharray={dashArray}
+                strokeDasharray={circumference}
+                strokeDashoffset={offset}
+                strokeLinecap="round"
+                transform="rotate(-90 18 18)"
               />
             </svg>
+
             <div className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl font-extrabold text-gray-900">
               {progress}%
             </div>

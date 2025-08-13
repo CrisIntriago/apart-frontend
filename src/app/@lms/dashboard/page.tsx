@@ -6,6 +6,7 @@ import { useModuleService } from "@/data/api/module/moduleService";
 import { useExamService, ExamResponse } from "@/data/api/exam/examService";
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
+import { useCourseProgress } from "@/data/api/course/courseService";
 
 const DashboardPage = () => {
   const { user: userData, isLoading: userLoading } = useUser();
@@ -36,12 +37,20 @@ const DashboardPage = () => {
     ? getExamsByCourseId(courseId)
     : { data: null, isLoading: false, error: null };
 
-  if (modulesLoading || examsLoading) {
+  const {
+    data: progressData,
+    isLoading: progressLoading,
+    error: progressError,
+  } = courseId
+    ? useCourseProgress(courseId)
+    : { data: null, isLoading: false, error: null };
+
+  if (modulesLoading || examsLoading || progressLoading) {
     return <p className="p-6">Cargando módulos y exámenes...</p>;
   }
 
-  if (modulesError) {
-    return <p className="p-6 text-red-500">Error al cargar los módulos.</p>;
+  if (modulesError || progressError) {
+    return <p className="p-6 text-red-500">Error al cargar datos del curso.</p>;
   }
   if (examsError) {
     return <p className="p-6 text-red-500">Error al cargar los exámenes.</p>;
@@ -49,6 +58,8 @@ const DashboardPage = () => {
 
   const modules = modulesData?.data ?? [];
   const exams = examsData?.data ?? [];
+  const courseProgress = progressData?.overall?.percent ?? 0;
+  const modulesProgress = progressData?.modules ?? [];
 
   const parcialExam = exams.find((e) => e.type.toLowerCase() === "midterm");
   const finalExam = exams.find((e) => e.type.toLowerCase() === "final");
@@ -61,8 +72,6 @@ const DashboardPage = () => {
     ...modules.slice(middleIndex),
     ...(finalExam ? [finalExam] : []),
   ];
-
-  const progress = 40;
 
   return (
     <main className="min-h-screen bg-[#E3E3E3] py-10 px-4 flex justify-center">
@@ -80,7 +89,7 @@ const DashboardPage = () => {
           <div className="w-full border-black border-2 rounded-full h-4 mb-6 overflow-hidden">
             <div
               className="h-full bg-[#996C52]"
-              style={{ width: `${progress}%` }}
+              style={{ width: `${courseProgress}%` }}
             ></div>
           </div>
 
@@ -89,8 +98,12 @@ const DashboardPage = () => {
               {combinedItems.map((item, index) => {
                 const isExam = "type" in item;
                 const isLast = index === combinedItems.length - 1;
-
                 const lineLeftPosition = 46;
+
+                const moduleCompleted =
+                  !isExam &&
+                  modulesProgress.find((m) => m.id === item.id)?.completed ===
+                    modulesProgress.find((m) => m.id === item.id)?.total;
 
                 return (
                   <Link
@@ -146,6 +159,12 @@ const DashboardPage = () => {
                         {isExam ? item.title : item.description}
                       </p>
                     </div>
+
+                    {!isExam && moduleCompleted && (
+                      <span className="ml-auto mr-4 px-2 py-1 bg-green-200 text-green-800 text-xs font-semibold rounded">
+                        Completado
+                      </span>
+                    )}
                   </Link>
                 );
               })}
