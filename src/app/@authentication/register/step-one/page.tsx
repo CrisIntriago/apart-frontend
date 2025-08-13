@@ -8,6 +8,7 @@ import LayoutRegister from "@/components/modules/authentication/register/LayoutR
 import { PATHS } from "@/constants/paths";
 import { useAuthService } from "@/data/api/auth/authService";
 import { useState } from "react";
+import { validatePassword } from "@/utils/validatePassword";
 
 const StepOne = () => {
   const router = useRouter();
@@ -17,22 +18,29 @@ const StepOne = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleNext = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage("");
+  e.preventDefault();
+  setErrorMessage("");
 
-    try {
-      const res = await validateEmail.mutateAsync({ email: formData.email });
+  const passwordError = validatePassword(formData.password);
+  if (passwordError) {
+    setErrorMessage(passwordError);
+    return;
+  }
 
-      if (res.data?.exists) {
-        setErrorMessage("Ya existe una cuenta con este correo electrónico.");
-        return;
-      }
+  try {
+    const res = await validateEmail.mutateAsync({ email: formData.email });
 
-      router.push(PATHS.REGISTER.STEP_TWO);
-    } catch (error) {
-      setErrorMessage("Error al validar el correo. Intenta de nuevo.");
+    if (res.data?.exists) {
+      setErrorMessage("Ya existe una cuenta con este correo electrónico.");
+      return;
     }
-  };
+
+    router.push(PATHS.REGISTER.STEP_TWO);
+  } catch (error) {
+    setErrorMessage("Error al validar el correo. Intenta de nuevo.");
+  }
+};
+
 
   return (
     <LayoutRegister>
