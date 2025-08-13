@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Divider, Typography, Link } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
 import { PATHS } from "@/constants/paths";
 import { useAuthService } from "@/data/api/auth/authService";
 import { useRouter } from "next/navigation";
-import { setSharedSession } from "@/utils/sessionHandlerUtils";
+import { setSharedSession, handleLoginSuccess } from "@/utils/sessionHandlerUtils";
 import HeaderNavigation from "../HeaderNavigation";
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 const LoginPageContent = () => {
   const [email, setEmail] = useState("");
@@ -19,31 +19,35 @@ const LoginPageContent = () => {
     router.replace(PATHS.LOGIN);
   }, [router]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const _handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
     login.mutate(
       { email, password },
       {
-        onSuccess: (response) => {
-          const accessToken = response.data?.token;
-          const userId = response.data?.user.id;
-          const hasCourse =
-            Array.isArray(response.data?.user.courses) &&
-            response.data.user.courses.length > 0;
-          if (accessToken) {
-            setSharedSession({ accessToken, uid: userId, hasCourse });
-          } else {
-            console.error("No access token received in response:", response);
-          }
-        },
+        onSuccess: handleLoginSuccess,
         onError: (error) => {
           console.error("Error al iniciar sesión:", error);
           setErrorMessage("Correo o contraseña incorrectos");
         },
       }
     );
+  };
+
+  const _handleLoginGoogle = (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      login.mutate(
+        { google_token: credentialResponse.credential },
+        {
+          onSuccess: handleLoginSuccess,
+          onError: (error) => {
+            console.error("Error al iniciar sesión:", error);
+            setErrorMessage("Correo o contraseña incorrectos");
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -58,17 +62,16 @@ const LoginPageContent = () => {
       <main className="w-full max-w-md px-6 text-center">
         <h2 className="text-2xl font-semibold mb-6">Inicia sesión</h2>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <Button
-            variant="outlined"
-            fullWidth
-            startIcon={<GoogleIcon />}
-            className="normal-case"
-          >
-            Continuar con Google
-          </Button>
+        <form onSubmit={_handleLogin} className="space-y-4">
 
-          <Divider className="my-4">o</Divider>
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
+              onError={() => console.log('Login Failed')}
+              useOneTap
+            />
+            <Divider className="my-4">o</Divider>
+          </GoogleOAuthProvider>
 
           <TextField
             label="Correo electrónico"
