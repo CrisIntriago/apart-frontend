@@ -20,7 +20,7 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
   const router = useRouter();
   const { session } = useAccountStore();
   const [isHydrated, setIsHydrated] = useState(false);
-  const { user } = useUser();
+  const { user, isLoading: userLoading } = useUser();
 
   const checkValidRoute = async () => {
     if (!session.uid && !PUBLIC_ROUTES.includes(pathname)) {
@@ -44,27 +44,29 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
     ) {
       router.replace(PATHS.NOT_COURSE_ASIGNED);
       return;
-    } if (user && session.uid && user && user.course && !PROTECTED_ROUTES.includes(pathname)) {
+    } else if (user &&
+      typeof user === "object" &&
+      "course" in user && session.uid && !PROTECTED_ROUTES.includes(pathname)) {
       router.replace(PATHS.USER_COURSES.PROFILE);
       return;
-    } 
+    }
   };
 
   useEffect(() => {
-    if (isHydrated) {
+    if (isHydrated && !userLoading) {
       checkValidRoute();
     }
-  }, [pathname, isHydrated, user]);
+  }, [pathname, isHydrated, userLoading, user]);
 
   useEffect(() => {
-    if (!isHydrated) {
-      accountStore.persist.rehydrate()?.then(() => {
-        setIsHydrated(true);
-      });
-    }
+    accountStore.persist.rehydrate()?.then(() => {
+      setIsHydrated(true);
+    });
   }, []);
 
-  return isHydrated ? <>{children}</> : <LoaderComponent />;
+  const dataReady = isHydrated && !userLoading && user !== undefined;
+
+  return dataReady ? <>{children}</> : <LoaderComponent />;
 };
 
 export default AuthGuard;

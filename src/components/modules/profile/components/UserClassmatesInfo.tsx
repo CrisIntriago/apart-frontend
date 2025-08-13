@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useUser } from "@/context/UserContext";
 import personImage from "@images/default-profile.png";
 import { useCourseStudents } from "@/data/api/course/courseService";
+import { StudentProfile } from "@/types/user";
 
 const InstagramIcon = () => (
   <svg
@@ -18,8 +19,7 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const UserClassmatesInfo = () => {
-  const { user } = useUser();
+const UserClassmatesInfo =  ({ user }: { user: StudentProfile | null }) => {
   const courseId = user?.course?.id;
 
   const { data: classmates = [], isLoading } = useCourseStudents(courseId ?? 0);

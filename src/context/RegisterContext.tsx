@@ -17,6 +17,7 @@ interface RegisterData {
 interface RegisterContextType {
   formData: RegisterData;
   setFormData: React.Dispatch<React.SetStateAction<RegisterData>>;
+  resetFormData: (keepEmail?: boolean) => void;
 }
 
 const RegisterContext = createContext<RegisterContextType | undefined>(undefined);
@@ -30,7 +31,7 @@ export const useRegister = () => {
 };
 
 export const RegisterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [formData, setFormData] = useState<RegisterData>({
+  const initialFormData: RegisterData = {
     username: "",
     email: "",
     password: "",
@@ -40,10 +41,19 @@ export const RegisterProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     country: "",
     languages: "",
     image: null,
-  });
+  };
+
+  const [formData, setFormData] = useState<RegisterData>(initialFormData);
+
+  const resetFormData = (keepEmail: boolean = false) => {
+    setFormData((prev) => ({
+      ...initialFormData,
+      email: keepEmail ? prev.email : "",
+    }));
+  };
 
   return (
-    <RegisterContext.Provider value={{ formData, setFormData }}>
+    <RegisterContext.Provider value={{ formData, setFormData, resetFormData }}>
       {children}
     </RegisterContext.Provider>
   );

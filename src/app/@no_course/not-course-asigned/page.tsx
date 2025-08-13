@@ -6,17 +6,21 @@ import { useAuthService } from "@/data/api/auth/authService";
 import { removeSessionStorageCookies } from "@/data/serverActions/authenticationCookiesAction";
 import { removeAccountState } from "@/data/store/accountStore";
 import { Button } from "@mui/material";
+import { useEffect } from "react";
 
 export default function NotCourseAssignedPage() {
   const router = useRouter();
   const { logout } = useAuthService();
+
+  useEffect(() => {
+      router.replace(PATHS.NOT_COURSE_ASIGNED);
+    }, [router]);
 
   const handleLogoutAndRedirect = async () => {
     try {
       await logout.mutateAsync();
       removeAccountState();
       await removeSessionStorageCookies();
-      router.push(PATHS.LOGIN);
     } catch (e) {
       console.error("Error al cerrar sesión:", e);
     }
