@@ -1,5 +1,10 @@
 "use client";
-import { PATHS, PROTECTED_ROUTES, PUBLIC_ROUTES } from "@/constants/paths";
+import {
+  DYNAMIC_ROUTE_PREFIXES,
+  PATHS,
+  PROTECTED_ROUTES,
+  PUBLIC_ROUTES,
+} from "@/constants/paths";
 import {
   accountStore,
   removeAccountState,
@@ -21,6 +26,10 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
   const { session } = useAccountStore();
   const [isHydrated, setIsHydrated] = useState(false);
   const { user, isLoading: userLoading } = useUser();
+
+  function isDynamicRoute(pathname: string) {
+    return DYNAMIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  }
 
   const checkValidRoute = async () => {
     if (!session.uid && !PUBLIC_ROUTES.includes(pathname)) {
@@ -44,9 +53,14 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
     ) {
       router.replace(PATHS.NOT_COURSE_ASIGNED);
       return;
-    } else if (user &&
+    } else if (
+      user &&
       typeof user === "object" &&
-      "course" in user && session.uid && !PROTECTED_ROUTES.includes(pathname)) {
+      "course" in user &&
+      session.uid &&
+      !PROTECTED_ROUTES.includes(pathname) &&
+      !isDynamicRoute(pathname)
+    ) {
       router.replace(PATHS.USER_COURSES.PROFILE);
       return;
     }

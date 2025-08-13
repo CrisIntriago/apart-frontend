@@ -1,11 +1,11 @@
 "use client";
 
 import { AlignJustify } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useModuleService } from "@/data/api/module/moduleService";
-import LeccionImage from "@images/clip-path.png";
+import { useExamService, ExamResponse } from "@/data/api/exam/examService";
 import { useUser } from "@/context/UserContext";
+import Image from "next/image";
 
 const DashboardPage = () => {
   const { user: userData, isLoading: userLoading } = useUser();
@@ -18,19 +18,50 @@ const DashboardPage = () => {
   const courseName = userData?.course.name ?? "Curso sin nombre";
 
   const { getModulesByCourseId } = useModuleService();
-  const { data, isLoading, error } = courseId
+  const { getExamsByCourseId } = useExamService();
+
+  const {
+    data: modulesData,
+    isLoading: modulesLoading,
+    error: modulesError,
+  } = courseId
     ? getModulesByCourseId(courseId)
     : { data: null, isLoading: false, error: null };
 
-  if (isLoading) {
-    return <p className="p-6">Cargando módulos...</p>;
+  const {
+    data: examsData,
+    isLoading: examsLoading,
+    error: examsError,
+  } = courseId
+    ? getExamsByCourseId(courseId)
+    : { data: null, isLoading: false, error: null };
+
+  if (modulesLoading || examsLoading) {
+    return <p className="p-6">Cargando módulos y exámenes...</p>;
   }
 
-  if (error) {
+  if (modulesError) {
     return <p className="p-6 text-red-500">Error al cargar los módulos.</p>;
   }
+  if (examsError) {
+    return <p className="p-6 text-red-500">Error al cargar los exámenes.</p>;
+  }
 
-  const modules = data?.data ?? [];
+  const modules = modulesData?.data ?? [];
+  const exams = examsData?.data ?? [];
+
+  const parcialExam = exams.find((e) => e.type.toLowerCase() === "midterm");
+  const finalExam = exams.find((e) => e.type.toLowerCase() === "final");
+
+  const middleIndex = Math.floor(modules.length / 2);
+
+  const combinedItems: ((typeof modules)[0] | ExamResponse)[] = [
+    ...modules.slice(0, middleIndex),
+    ...(parcialExam ? [parcialExam] : []),
+    ...modules.slice(middleIndex),
+    ...(finalExam ? [finalExam] : []),
+  ];
+
   const progress = 40;
 
   return (
@@ -54,55 +85,71 @@ const DashboardPage = () => {
           </div>
 
           <div className="relative ml-10">
-            <div className="absolute top-0 left-[40px] w-0.5 bg-black h-full z-0"></div>
+            <div className="flex flex-col space-y-8 relative">
+              {combinedItems.map((item, index) => {
+                const isExam = "type" in item;
+                const isLast = index === combinedItems.length - 1;
 
-            <div className="flex flex-col space-y-8">
-              {modules.map((module) => (
-                <Link
-                  key={module.id}
-                  href={`/module/${module.id}`}
-                  className="flex items-center gap-4 relative bg-white p-3 rounded-xl transition duration-300 ease-in-out hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02]"
-                >
-                  <div className="relative z-10 w-[60px] h-[60px]">
-                    <Image
-                      src={module.image || "/default-module-image.png"}
-                      alt={module.name}
-                      fill
-                      className="rounded-full object-cover border-2 border-black"
-                    />
-                  </div>
+                const lineLeftPosition = 46;
 
-                  <div className="flex flex-col">
-                    <h3 className="text-sm font-bold text-gray-900">
-                      {module.name}
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      {module.description}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+                return (
+                  <Link
+                    key={isExam ? `exam-${item.id}` : item.id}
+                    href={isExam ? `/exam/${item.id}` : `/module/${item.id}`}
+                    className={`flex items-center gap-4 relative bg-white rounded-xl transition duration-300 ease-in-out hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02] ${
+                      isExam ? "border-2 border-black" : ""
+                    }`}
+                    style={{
+                      paddingLeft: "90px",
+                      paddingTop: "12px",
+                      paddingBottom: "12px",
+                      marginLeft: "12px",
+                    }}
+                  >
+                    {!isLast && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: lineLeftPosition,
+                          top: "100%",
+                          width: 2,
+                          height: 40,
+                          backgroundColor: "black",
+                          zIndex: 0,
+                        }}
+                      />
+                    )}
+
+                    {!isExam && (
+                      <div
+                        className="relative z-10 w-[60px] h-[60px]"
+                        style={{ position: "absolute", left: "16px" }}
+                      >
+                        <Image
+                          src={item.image || "/default-module-image.png"}
+                          alt={item.name}
+                          fill
+                          className="rounded-full object-cover border-2 border-black"
+                        />
+                      </div>
+                    )}
+
+                    <div className="flex flex-col z-10">
+                      <h3 className="text-sm font-bold text-gray-900">
+                        {isExam
+                          ? item.type.toLowerCase() === "midterm"
+                            ? "Examen Parcial"
+                            : "Examen Final"
+                          : item.name}
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        {isExam ? item.title : item.description}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow px-14 py-4 flex items-center gap-4">
-          <div className="relative w-[35px] h-[35px] flex-shrink-0">
-            <Image
-              src={LeccionImage}
-              alt="Refuerzo del capítulo"
-              fill
-              className="rounded-full object-cover"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <h3 className="text-sm font-bold text-gray-900 mb-1">
-              Lección: Refuerzo
-            </h3>
-            <p className="text-sm text-gray-600">
-              Afianza tus conocimientos del capítulo 1 con esta lección extra.
-            </p>
           </div>
         </div>
       </section>
