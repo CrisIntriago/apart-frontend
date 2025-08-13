@@ -23,6 +23,7 @@ const AuthGuard = ({ children }: AuthGuardProps) => {
   const { user, isLoading: userLoading } = useUser();
 
   const checkValidRoute = async () => {
+    console.log("user", user);
     if (!session.uid && !PUBLIC_ROUTES.includes(pathname)) {
       router.replace(PATHS.LOGIN);
       return;

@@ -13,7 +13,7 @@ interface RegisterPayload {
   password: string;
   first_name: string;
   last_name: string;
-  national_id: string;
+  national_id?: string;
   country: string;
   date_of_birth: string;
   languages: string[];
@@ -57,7 +57,6 @@ export function useAuthService() {
           password: payload.password,
           first_name: payload.first_name,
           last_name: payload.last_name,
-          national_id: payload.national_id,
           country: payload.country,
           date_of_birth: payload.date_of_birth,
           languages: payload.languages,

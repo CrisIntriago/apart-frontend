@@ -119,7 +119,6 @@ const StepTwo = () => {
     password: formData.password,
     first_name: formData.firstName,
     last_name: formData.lastName,
-    national_id: formData.email,
     country: formData.country,
     date_of_birth: formData.birthDate,
     languages: selectedLanguages,

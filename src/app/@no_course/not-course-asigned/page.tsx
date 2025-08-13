@@ -21,7 +21,6 @@ export default function NotCourseAssignedPage() {
       await logout.mutateAsync();
       removeAccountState();
       await removeSessionStorageCookies();
-      router.push(PATHS.LOGIN);
     } catch (e) {
       console.error("Error al cerrar sesión:", e);
     }

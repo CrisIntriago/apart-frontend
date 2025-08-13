@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { StudentProfile } from "@/types/user";
 import { useStudentProfile } from "@/data/api/student/studentService";
+import { useAccountStore } from "@/data/store/accountStore";
 
 interface UserContextType {
   user: StudentProfile | null;
@@ -20,11 +21,22 @@ export const useUser = () => {
 };
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { data, isLoading, error } = useStudentProfile();
+  const { session } = useAccountStore();
+  const { data, isLoading, error, refetch } = useStudentProfile();
   const [user, setUser] = useState<StudentProfile | null>(null);
 
   useEffect(() => {
-    if (data) setUser(data);
+    if (session?.uid) {
+      refetch();
+    } else {
+      setUser(null);
+    }
+  }, [session?.uid, refetch]);
+
+  useEffect(() => {
+    if (data) {
+      setUser(data);
+    }
   }, [data]);
 
   if (isLoading) return <div className="p-8 text-center">Cargando perfil...</div>;
