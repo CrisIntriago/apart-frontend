@@ -3,9 +3,23 @@
 import Image from "next/image";
 import { CheckCircle } from "lucide-react";
 import paypalLogo from "@images/logo-paypal.webp";
+import { PlanCard } from "@/components/suscriptions/planCard";
+import { plans } from "@/constants/suscriptionPlans";
+import { useUser } from "@/context/UserContext";
+import { useQueryErrorResetBoundary } from "@tanstack/react-query";
 
 const UserMembershipInfo = () => {
   const subscriptionDate = "20 de julio de 2025";
+
+  const { user, isLoading } = useUser();
+  const email = user?.email;
+
+  // Construir la URL de Stripe justo antes del botón
+  const stripeUrl =
+    "https://billing.stripe.com/p/login/test_3cIcMYf8I7G23Mzb8VeEo00" +
+    (email ? `?prefilled_email=${email}` : "");
+
+  console.log(stripeUrl);
 
   return (
     <div className="bg-[#E3E3E3] flex flex-col items-center px-6 py-8">
@@ -31,17 +45,28 @@ const UserMembershipInfo = () => {
           </div>
         </div>
 
-        <button className="bg-[#FFDD00] hover:bg-[#e6c800] transition rounded-full px-6 py-2 text-sm font-bold text-black flex items-center gap-3 shadow-md">
-          <span>Maneja tu pago con PayPal</span>
-          <Image
-            src={paypalLogo}
-            alt="PayPal Logo"
-            width={60}
-            height={60}
-            className="object-contain"
-          />
-        </button>
+        {email && (
+          <a
+            href={stripeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#635bff] hover:bg-[#5546c8] transition rounded-full px-6 py-2 text-sm font-bold text-white flex items-center gap-3 shadow-md"
+          >
+            <span>Maneja tu pago con Stripe</span>
+            {/*TO-DO: Logo de Stripe*/}
+          </a>
+        )}
       </div>
+
+      <PlanCard
+        title="Plan Mensual"
+        description="Acceso completo a todas las características."
+        price={plans.mensual.price}
+        link={plans.mensual.link}
+        email={email}
+        badgeText="Más Popular"
+        isSpecialOffer
+      />
 
       <p className="text-sm text-gray-500 mt-10 max-w-md text-center">
         Gestiona tus pagos o actualiza tu información de suscripción en cualquier momento mediante el botón de PayPal.
