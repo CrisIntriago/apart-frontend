@@ -26,13 +26,13 @@ const UserVocabularyTable: React.FC<Props> = ({ data }) => {
           <thead className="bg-gray-900">
             <tr>
               <th className="px-4 py-3 border border-gray-200 text-white">
-                Word
+                Palabra
               </th>
               <th className="px-4 py-3 border border-gray-200 text-white">
-                Meaning
+                Significado
               </th>
               <th className="px-4 py-3 border border-gray-200 text-white">
-                Vocabulary
+                Dificultad
               </th>
             </tr>
           </thead>

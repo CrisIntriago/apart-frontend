@@ -25,7 +25,7 @@ const UserVocabularyContent = () => {
   return (
     <div className="px-4">
       <h1 className="text-3xl font-semibold text-center mt-6 mb-12">
-        Your Vocabulary
+        Tu Vocabulario
       </h1>
       {(vocabularyData ?? []).length === 0 ? (
         <h2 className="text-center text-gray-700 mt-2">
