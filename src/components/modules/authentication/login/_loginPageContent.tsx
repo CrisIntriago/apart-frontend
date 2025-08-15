@@ -140,7 +140,7 @@ const LoginPageContent = () => {
         <div className="mt-6 space-y-2">
           <Typography variant="body1">
             <Link href="#" underline="hover">
-              <strong>¿Necesitas ayuda para iniciar sesión?</strong>
+              <strong>¿Olvidaste tu contraseña?</strong>
             </Link>
           </Typography>
 

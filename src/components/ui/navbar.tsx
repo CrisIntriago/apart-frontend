@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Bell, BookOpen, Users, User, Menu, LogOut } from "lucide-react";
+import { Bell, BookOpen, Users, User, Menu, LogOut, BookA } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import profileImage from "@images/default-profile.png";
@@ -74,7 +74,7 @@ const Navbar = () => {
               : "hover:underline"
           }`}
         >
-          <User className="w-5 h-5 text-black" />
+          <BookA className="w-5 h-5 text-black" />
           <span>Vocabulario</span>
         </Link>
         

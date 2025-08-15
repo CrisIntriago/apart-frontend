@@ -94,7 +94,7 @@ const StepOne = () => {
 
 
         <TextField
-          label="Nombre"
+          label="Nombre de usuario"
           fullWidth
           required
           value={formData.username}
