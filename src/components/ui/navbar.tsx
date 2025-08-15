@@ -66,10 +66,18 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center space-x-6 text-sm text-black font-bold">
-        <div className="hidden md:flex items-center space-x-2 cursor-pointer">
-          <Bell className="w-5 h-5 text-black" />
-          <span>Notificaciones</span>
-        </div>
+        <Link
+          href={PATHS.USER_COURSES.VOCABULARY}
+          className={`hidden md:flex items-center space-x-2 ${
+            isActive(PATHS.USER_COURSES.VOCABULARY)
+              ? "underline"
+              : "hover:underline"
+          }`}
+        >
+          <User className="w-5 h-5 text-black" />
+          <span>Vocabulario</span>
+        </Link>
+        
         <Link
           href={PATHS.USER_COURSES.PROFILE}
           className={`hidden md:flex items-center space-x-2 ${
