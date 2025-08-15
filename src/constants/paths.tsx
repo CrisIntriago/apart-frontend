@@ -2,6 +2,7 @@ const PATHS = {
   HOME: "/",
   LOGOUT: "/logout",
   LOGIN: "/login",
+  FORGOT_PASSWORD: "/forgot-password",
   REGISTER: {
     STEP_ONE: "/register/step-one",
     STEP_TWO: "/register/step-two",
@@ -60,6 +61,7 @@ const PUBLIC_ROUTES = [
   PATHS.REGISTER.STEP_ONE,
   PATHS.REGISTER.STEP_TWO,
   PATHS.REGISTER.VERIFY_USER,
+  PATHS.FORGOT_PASSWORD
 ];
 
 export { PATHS, PROTECTED_ROUTES, PUBLIC_ROUTES, DYNAMIC_ROUTE_PREFIXES };

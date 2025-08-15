@@ -5,9 +5,12 @@ import { TextField, Button, Divider, Typography, Link } from "@mui/material";
 import { PATHS } from "@/constants/paths";
 import { useAuthService } from "@/data/api/auth/authService";
 import { useRouter } from "next/navigation";
-import { setSharedSession, handleLoginSuccess } from "@/utils/sessionHandlerUtils";
+import {
+  setSharedSession,
+  handleLoginSuccess,
+} from "@/utils/sessionHandlerUtils";
 import HeaderNavigation from "../HeaderNavigation";
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useRegister } from "@/context/RegisterContext";
 
 const LoginPageContent = () => {
@@ -17,7 +20,7 @@ const LoginPageContent = () => {
   const { login } = useAuthService();
   const router = useRouter();
   const { formData, setFormData } = useRegister();
-  
+
   useEffect(() => {
     router.replace(PATHS.LOGIN);
   }, [router]);
@@ -51,7 +54,7 @@ const LoginPageContent = () => {
           onError: (error: any) => {
             if (error.status === 404) {
               const google_data = error.data.user;
-              console.log(google_data)
+              console.log(google_data);
               const [firstName, ...rest] = google_data.username.split(" ");
               const lastName = rest.join(" ");
               setFormData({
@@ -85,11 +88,14 @@ const LoginPageContent = () => {
         <h2 className="text-2xl font-semibold mb-6">Inicia sesión</h2>
 
         <form onSubmit={_handleLogin} className="space-y-4">
-
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+          <GoogleOAuthProvider
+            clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}
+          >
             <GoogleLogin
-              onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
-              onError={() => console.log('Login Failed')}
+              onSuccess={(credentialResponse) =>
+                _handleLoginGoogle(credentialResponse)
+              }
+              onError={() => console.log("Login Failed")}
               useOneTap
             />
             <Divider className="my-4">o</Divider>
@@ -139,22 +145,15 @@ const LoginPageContent = () => {
 
         <div className="mt-6 space-y-2">
           <Typography variant="body1">
-            <Link href="#" underline="hover">
+            <Link
+              component="button"
+              underline="hover"
+              onClick={() => router.push(PATHS.FORGOT_PASSWORD)}
+            >
               <strong>¿Olvidaste tu contraseña?</strong>
             </Link>
           </Typography>
 
-          <Typography variant="body2">
-            Al registrarte, estás creando una cuenta de Apart y aceptas los{" "}
-            <Link href="#" underline="always">
-              Términos
-            </Link>{" "}
-            y la{" "}
-            <Link href="#" underline="always">
-              Política de Privacidad
-            </Link>{" "}
-            de Apart.
-          </Typography>
         </div>
       </main>
     </div>

@@ -1,7 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { TextField, Button, Chip, Autocomplete, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Chip,
+  Autocomplete,
+  Typography,
+  Link,
+} from "@mui/material";
 import { useRegister } from "@/context/RegisterContext";
 import { useState } from "react";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
@@ -10,14 +17,37 @@ import { PATHS } from "@/constants/paths";
 import LoaderComponent from "@/components/ui/loaderComponent";
 
 const countryOptions = [
-  "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba",
-  "Ecuador", "El Salvador", "España", "Guatemala", "Honduras", "México",
-  "Nicaragua", "Panamá", "Paraguay", "Perú", "Uruguay", "Venezuela",
+  "Argentina",
+  "Bolivia",
+  "Brasil",
+  "Chile",
+  "Colombia",
+  "Costa Rica",
+  "Cuba",
+  "Ecuador",
+  "El Salvador",
+  "España",
+  "Guatemala",
+  "Honduras",
+  "México",
+  "Nicaragua",
+  "Panamá",
+  "Paraguay",
+  "Perú",
+  "Uruguay",
+  "Venezuela",
 ];
 
 const languageOptions = [
-  "Español", "Francés", "Alemán", "Italiano", "Portugués", "Ruso",
-  "Japonés", "Chino", "Árabe",
+  "Español",
+  "Francés",
+  "Alemán",
+  "Italiano",
+  "Portugués",
+  "Ruso",
+  "Japonés",
+  "Chino",
+  "Árabe",
 ];
 
 const LanguageSelector = ({
@@ -37,17 +67,23 @@ const LanguageSelector = ({
 
   return (
     <div className="space-y-3">
-      <Typography className="font-semibold">Idiomas que hablas (máx. 3)</Typography>
+      <Typography className="font-semibold">
+        Idiomas que hablas (máx. 3)
+      </Typography>
 
       <div className="flex flex-wrap gap-2">
         {languageOptions.map((lang) => (
           <Button
             key={lang}
-            variant={selectedLanguages.includes(lang) ? "contained" : "outlined"}
+            variant={
+              selectedLanguages.includes(lang) ? "contained" : "outlined"
+            }
             color="primary"
             size="small"
             onClick={() => handleToggleLanguage(lang)}
-            disabled={!selectedLanguages.includes(lang) && selectedLanguages.length >= 3}
+            disabled={
+              !selectedLanguages.includes(lang) && selectedLanguages.length >= 3
+            }
             className="normal-case"
           >
             {lang}
@@ -57,7 +93,12 @@ const LanguageSelector = ({
 
       <div className="flex flex-wrap gap-2 mt-2">
         {selectedLanguages.map((lang) => (
-          <Chip key={lang} label={lang} color="primary" onDelete={() => handleToggleLanguage(lang)} />
+          <Chip
+            key={lang}
+            label={lang}
+            color="primary"
+            onDelete={() => handleToggleLanguage(lang)}
+          />
         ))}
       </div>
     </div>
@@ -154,7 +195,10 @@ const StepTwo = () => {
                 required
                 value={formData.firstName}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, firstName: e.target.value }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    firstName: e.target.value,
+                  }))
                 }
                 InputProps={{ style: { backgroundColor: "#E3E3E3" } }}
               />
@@ -176,7 +220,10 @@ const StepTwo = () => {
                 InputLabelProps={{ shrink: true }}
                 value={formData.birthDate}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, birthDate: e.target.value }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    birthDate: e.target.value,
+                  }))
                 }
                 InputProps={{ style: { backgroundColor: "#E3E3E3" } }}
               />
@@ -207,7 +254,10 @@ const StepTwo = () => {
                 .map((l) => l.trim())
                 .filter(Boolean)}
               onChange={(newLanguages) =>
-                setFormData((prev) => ({ ...prev, languages: newLanguages.join(",") }))
+                setFormData((prev) => ({
+                  ...prev,
+                  languages: newLanguages.join(","),
+                }))
               }
             />
           </div>
@@ -229,7 +279,7 @@ const StepTwo = () => {
             fullWidth
             className="bg-black text-white"
           >
-            Finalizar
+            Finalizar Registro
           </Button>
         </div>
 
@@ -238,6 +288,21 @@ const StepTwo = () => {
             {errorMessage}
           </Typography>
         )}
+
+        <Typography
+          variant="body2"
+          className="mt-2 text-center text-gray-600 text-sm leading-snug"
+        >
+          Al registrarte, estás creando una cuenta de Apart y aceptas los{" "}
+          <Link href="#" underline="always" className="text-black font-medium">
+            Términos
+          </Link>{" "}
+          y la{" "}
+          <Link href="#" underline="always" className="text-black font-medium">
+            Política de Privacidad
+          </Link>{" "}
+          de Apart.
+        </Typography>
       </form>
     </LayoutRegister>
   );

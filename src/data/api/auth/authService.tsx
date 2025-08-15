@@ -46,6 +46,7 @@ export function useAuthService() {
       return response;
     },
   });
+
   const registerMutation = useMutation<
     ApartResponseApi<AuthResponse>,
     unknown,
@@ -101,11 +102,26 @@ export function useAuthService() {
     },
   });
 
+  const passwordResetMutation = useMutation<
+    ApartResponseApi<{ detail?: string; email?: string[] }>,
+    unknown,
+    { email: string }
+  >({
+    mutationFn: async (payload: { email: string }) => {
+      return await post<{ detail?: string; email?: string[] }>({
+        path: "/auth/password-reset/request/",
+        body: {
+          email: payload.email,
+        },
+      });
+    },
+  });
 
   return {
     login: loginMutation,
     register: registerMutation,
     logout: logoutMutation,
     validateEmail: validateEmailMutation,
+    passwordReset: passwordResetMutation,
   };
 }
