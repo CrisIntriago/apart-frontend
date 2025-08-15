@@ -49,7 +49,6 @@ function ExamModule({ id }: ExamModuleProps) {
             const diff = Math.max(Math.floor((endTime - now) / 1000), 0);
             setTimeLeft(diff);
 
-            if (diff === 0) handleFinishExam(data.attempt_id);
           };
 
           updateTimeLeft();
