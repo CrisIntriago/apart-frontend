@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { setSharedSession, handleLoginSuccess } from "@/utils/sessionHandlerUtils";
 import HeaderNavigation from "../HeaderNavigation";
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { useRegister } from "@/context/RegisterContext";
 
 const LoginPageContent = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,8 @@ const LoginPageContent = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const { login } = useAuthService();
   const router = useRouter();
+  const { formData, setFormData } = useRegister();
+  
   useEffect(() => {
     router.replace(PATHS.LOGIN);
   }, [router]);
@@ -26,7 +29,9 @@ const LoginPageContent = () => {
     login.mutate(
       { email, password },
       {
-        onSuccess: handleLoginSuccess,
+        onSuccess: (response) => {
+          handleLoginSuccess(response);
+        },
         onError: (error) => {
           console.error("Error al iniciar sesión:", error);
           setErrorMessage("Correo o contraseña incorrectos");
@@ -40,8 +45,25 @@ const LoginPageContent = () => {
       login.mutate(
         { google_token: credentialResponse.credential },
         {
-          onSuccess: handleLoginSuccess,
-          onError: (error) => {
+          onSuccess: (response) => {
+            handleLoginSuccess(response);
+          },
+          onError: (error: any) => {
+            if (error.status === 404) {
+              const google_data = error.data.user;
+              console.log(google_data)
+              const [firstName, ...rest] = google_data.username.split(" ");
+              const lastName = rest.join(" ");
+              setFormData({
+                ...formData,
+                email: google_data.email,
+                username: google_data.username,
+                firstName: firstName || "",
+                lastName: lastName || "",
+                password: google_data.password,
+              });
+              router.push(PATHS.REGISTER.STEP_TWO);
+            }
             console.error("Error al iniciar sesión:", error);
             setErrorMessage("Correo o contraseña incorrectos");
           },
