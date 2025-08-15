@@ -1,98 +1,189 @@
 "use client";
 
 import { AlignJustify } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useModuleService } from "@/data/api/module/moduleService";
-import LeccionImage from "@images/clip-path.png";
+import { useExamService, ExamResponse } from "@/data/api/exam/examService";
+import { useUser } from "@/context/UserContext";
+import Image from "next/image";
+import { useCourseProgress } from "@/data/api/course/courseService";
+import examImage from "@images/clip-path.png";
+import LoaderComponent from "@/components/ui/loaderComponent";
+
 const DashboardPage = () => {
-  const courseId = 1;
+  
+  const { user: userData, isLoading: userLoading } = useUser();
+
+  const courseId = userData?.course.id ?? -1;
+  const courseName = userData?.course.name ?? "Curso sin nombre";
+
   const { getModulesByCourseId } = useModuleService();
-  const { data, isLoading, error } = getModulesByCourseId(courseId);
+  const { getExamsByCourseId } = useExamService();
+  const modulesQuery = getModulesByCourseId(courseId);
+  const examsQuery = getExamsByCourseId(courseId);
+  const progressQuery = useCourseProgress(courseId);
 
-  if (isLoading) {
-    return <p className="p-6">Cargando módulos...</p>;
+  if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
+    return <LoaderComponent />;
   }
 
-  if (error) {
-    return <p className="p-6 text-red-500">Error al cargar los módulos.</p>;
+  if (modulesQuery.error || progressQuery.error) {
+    return <p className="p-6 text-red-500">Error al cargar datos del curso.</p>;
+  }
+  if (examsQuery.error) {
+    return <p className="p-6 text-red-500">Error al cargar los exámenes.</p>;
   }
 
-  const modules = data?.data ?? [];
-  const progress = 40;
+const modules = Array.isArray(modulesQuery.data?.data) ? modulesQuery.data.data : [];
+const exams = Array.isArray(examsQuery.data?.data) ? examsQuery.data.data : [];
+const courseProgress = progressQuery.data?.overall?.percent ?? 0;
+const modulesProgress = Array.isArray(progressQuery.data?.modules)
+  ? progressQuery.data.modules
+  : [];
+
+  const parcialExam = exams.find((e) => e.type.toLowerCase() === "midterm");
+  const finalExam = exams.find((e) => e.type.toLowerCase() === "final");
+
+  const middleIndex = Math.floor(modules.length / 2);
+
+  const combinedItems: ((typeof modules)[0] | ExamResponse)[] = [
+    ...modules.slice(0, middleIndex),
+    ...(parcialExam ? [parcialExam] : []),
+    ...modules.slice(middleIndex),
+    ...(finalExam ? [finalExam] : []),
+  ];
+
+  const linePositionLeft = 46;
 
   return (
     <main className="min-h-screen bg-[#E3E3E3] py-10 px-4 flex justify-center">
       <section className="w-full max-w-xl space-y-8">
         <div className="bg-white rounded-xl shadow flex items-center gap-2 px-8 py-3">
           <AlignJustify size={18} />
-          <span className="text-sm font-semibold text-gray-800">
-            Principiante A1
-          </span>
+          <span className="text-sm font-semibold text-gray-800">{courseName}</span>
         </div>
 
         <div className="bg-white rounded-xl shadow px-8 py-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
-            Capítulo 1: Presentaciones
-          </h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Contenido</h2>
 
           <div className="w-full border-black border-2 rounded-full h-4 mb-6 overflow-hidden">
-            <div
-              className="h-full bg-[#996C52]"
-              style={{ width: `${progress}%` }}
-            ></div>
+            <div className="h-full bg-[#996C52]" style={{ width: `${courseProgress}%` }} />
           </div>
 
-          <div className="relative ml-10">
-            <div className="absolute top-0 left-[40px] w-0.5 bg-black h-full z-0"></div>
+          <div className="flex flex-col w-full items-start">
+            {combinedItems.length === 0 ? (
+              <p className="text-center text-gray-500 font-medium py-6">
+                No hay contenido para este curso actualmente.
+              </p>
+            ) : (
+              combinedItems.map((item, index) => {
+                const isExam = "type" in item;
+                const moduleData = !isExam ? modulesProgress.find((m) => m.id === item.id) : null;
+                const moduleCompleted = moduleData && moduleData.completed === moduleData.total;
+                const examBlocked = isExam && !item.has_attempts_left;
 
-            <div className="flex flex-col space-y-8">
-              {modules.map((module, index) => (
-                <Link
-                  key={module.id}
-                  href={`/module/${module.id}`}
-                  className="flex items-center gap-4 relative bg-white p-3 rounded-xl transition duration-300 ease-in-out hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02]"
-                >
-                  <div className="relative z-10">
-                    <Image
-                      src={module.image || "/default-module-image.png"}
-                      alt={module.name}
-                      width={60}
-                      height={60}
-                      className="rounded-full object-cover border-2 border-black"
-                    />
+                return (
+                  <div
+                    key={isExam ? `exam-${item.id}` : item.id}
+                    className="w-full flex flex-col items-start"
+                  >
+                    {index > 0 && (
+                      <div className="relative w-full h-10 flex justify-start">
+                        <div
+                          style={{
+                            width: 2,
+                            height: "100%",
+                            backgroundColor: "black",
+                            marginLeft: linePositionLeft,
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    <div
+                      className={`relative w-full flex items-center gap-4 bg-white rounded-xl transition duration-300 ease-in-out ${
+                        examBlocked
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02]"
+                      }`}
+                      style={{
+                        padding: "12px 16px 12px 90px",
+                        boxSizing: "border-box",
+                      }}
+                    >
+                      <div
+                        className="relative w-[60px] h-[60px] flex-shrink-0 z-10"
+                        style={{
+                          position: "absolute",
+                          left: 16,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
+                        <Image
+                          src={isExam ? examImage : item.image || "/default-module-image.png"}
+                          alt={isExam ? "Examen" : item.name}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      </div>
+
+                      <div className="flex flex-col ml-4 z-10">
+                        <h3 className="text-sm font-bold text-gray-900">
+                          {isExam
+                            ? item.type.toLowerCase() === "midterm"
+                              ? "Examen Parcial"
+                              : "Examen Final"
+                            : item.name}
+                        </h3>
+                        <p className="text-xs text-gray-500">
+                          {isExam ? item.title : item.description}
+                        </p>
+                      </div>
+
+                      <span
+                        className={`ml-auto px-2 py-1 text-center text-xs font-semibold rounded z-10 ${
+                          isExam
+                            ? examBlocked
+                              ? "bg-green-200 text-green-800"
+                              : "bg-gray-200 text-gray-600"
+                            : moduleCompleted
+                            ? "bg-green-200 text-green-800"
+                            : "bg-gray-200 text-gray-600"
+                        }`}
+                      >
+                        {isExam ? (
+                          examBlocked ? (
+                            <>
+                              Completado
+                              <br />
+                              Puntaje: {Math.floor(Number(item.user_percentage))}/100
+                            </>
+                          ) : (
+                            <>
+                              Puntaje actual: {Math.floor(Number(item.user_percentage))}/100
+                              <br />
+                              {item.remaining_attempts}/{item.attempts_allowed} intentos
+                            </>
+                          )
+                        ) : moduleCompleted ? (
+                          "Completado"
+                        ) : (
+                          "Pendiente"
+                        )}
+                      </span>
+
+                      {!examBlocked && (
+                        <Link
+                          href={isExam ? `/exam/${item.id}` : `/module/${item.id}`}
+                          className="absolute inset-0 z-0"
+                        />
+                      )}
+                    </div>
                   </div>
-
-                  <div className="flex flex-col">
-                    <h3 className="text-sm font-bold text-gray-900">
-                      {module.name}
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      {module.description}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow px-14 py-4 flex items-center gap-4">
-          <Image
-            src={LeccionImage}
-            alt="Refuerzo del capítulo"
-            width={45}
-            height={45}
-            className="rounded-xl object-cover"
-          />
-
-          <div className="flex flex-col">
-            <h3 className="text-sm font-bold text-gray-900 mb-1">
-              Lección: Refuerzo
-            </h3>
-            <p className="text-sm text-gray-600">
-              Afianza tus conocimientos del capítulo 1 con esta lección extra.
-            </p>
+                );
+              })
+            )}
           </div>
         </div>
       </section>

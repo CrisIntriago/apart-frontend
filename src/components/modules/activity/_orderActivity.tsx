@@ -12,14 +12,16 @@ export default function OrderActivity({ activityData, onSubmit }: OrderActivityP
   const [availableWords, setAvailableWords] = useState(activityData.payload.words);
   const [orderedWords, setOrderedWords] = useState<string[]>([]);
 
-  const handleAdd = (word: string) => {
+  const handleAdd = (index: number) => {
+    const word = availableWords[index];
     setOrderedWords((prev) => [...prev, word]);
-    setAvailableWords((prev) => prev.filter((w) => w !== word));
+    setAvailableWords((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleRemove = (word: string) => {
+  const handleRemove = (index: number) => {
+    const word = orderedWords[index];
     setAvailableWords((prev) => [...prev, word]);
-    setOrderedWords((prev) => prev.filter((w) => w !== word));
+    setOrderedWords((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = () => {
@@ -39,7 +41,7 @@ export default function OrderActivity({ activityData, onSubmit }: OrderActivityP
           {availableWords.map((word, index) => (
             <button
               key={index}
-              onClick={() => handleAdd(word)}
+              onClick={() => handleAdd(index)}
               className="px-3 py-2 border border-gray-400 rounded-md text-gray-800 bg-white hover:bg-gray-100 transition"
             >
               {word}
@@ -54,7 +56,7 @@ export default function OrderActivity({ activityData, onSubmit }: OrderActivityP
           {orderedWords.map((word, index) => (
             <button
               key={index}
-              onClick={() => handleRemove(word)}
+              onClick={() => handleRemove(index)}
               className="px-3 py-2 border border-black rounded-md text-black bg-gray-100 hover:bg-gray-200 transition"
             >
               {word}

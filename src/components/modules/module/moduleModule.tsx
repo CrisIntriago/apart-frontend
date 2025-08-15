@@ -6,6 +6,7 @@ import ActivityModule from "@/components/modules/activity/activityModule";
 import { useActivitiesByModule, useSubmitActivity } from "@/data/api/activity/activityService";
 import ModuleSummary from "./ModuleSummary";
 import { PATHS } from "@/constants/paths";
+import LoaderComponent from "@/components/ui/loaderComponent";
 
 function ModuleMod({ id }: { id: string }) {
   const courseId = 1;
@@ -41,7 +42,8 @@ function ModuleMod({ id }: { id: string }) {
     );
   };
 
-  if (activitiesQuery.isLoading) return <p className="p-4">Cargando actividades...</p>;
+  if (activitiesQuery.isLoading) return <LoaderComponent />
+  ;
   if (!activitiesQuery.data || activitiesQuery.data.length === 0) return <p>No hay actividades disponibles.</p>;
 
   if (isFinished) {
@@ -57,7 +59,7 @@ function ModuleMod({ id }: { id: string }) {
   const currentActivity = activitiesQuery.data[currentIndex];
 
   return (
-    <div className="w-full p-4 bg-[#E3E3E3] rounded shadow">
+    <div className="w-full p-4 bg-[#E3E3E3] text-center rounded shadow">
       <h2 className="text-xl font-bold mb-4">
         Actividad {currentIndex + 1} de {activitiesQuery.data.length}
       </h2>

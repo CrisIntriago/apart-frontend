@@ -13,7 +13,7 @@ export default function ModuleSummary({ results, activities, onBack }: Props) {
   const correctCount = results.filter((r) => r.is_correct).length;
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-6 bg-white rounded">
+    <div className="w-full max-w-3xl mx-auto my-10 p-6 bg-white rounded">
       <h2 className="text-2xl font-bold mb-4">Resumen del módulo</h2>
       <p className="text-lg mb-6 text-gray-700 font-medium">
         Puntaje: {correctCount} / {results.length}

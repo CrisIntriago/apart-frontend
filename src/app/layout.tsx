@@ -5,6 +5,7 @@ import AuthGuard from "@/components/guards/authGuard";
 import { getSessionStorageCookies } from "@/data/serverActions/authenticationCookiesAction";
 import { ClientProvider } from "@/data/api/abstractApiClient";
 import { RegisterProvider } from "@/context/RegisterContext";
+import { UserProvider } from "@/context/UserContext";
 
 export const metadata: Metadata = {
   title: "Apart Web App",
@@ -14,27 +15,31 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   lms,
   authentication,
+  no_course
 }: Readonly<{
   authentication: React.ReactNode;
   lms: React.ReactNode;
+  no_course: React.ReactNode;
 }>) {
   const session = await getSessionStorageCookies();
   const userIsAuthenticated = session?.sessionToken !== null;
-  const appContent = userIsAuthenticated ? lms : authentication;
-
+  const hasCourse = session?.hasCourse;
+  const appContent = (userIsAuthenticated && !hasCourse) ? no_course : userIsAuthenticated ? lms : authentication;
   return (
-    <RegisterProvider>
-      <ClientProvider>
-        <html lang="en">
-          <body className="antialiased">
-            <CustomThemeProvider>
-              <AuthGuard>
-                <>{appContent}</>
-              </AuthGuard>
-            </CustomThemeProvider>
-          </body>
-        </html>
-      </ClientProvider>
-    </RegisterProvider>
+    <html lang="en">
+      <body className="antialiased">
+        <RegisterProvider>
+          <ClientProvider>
+            <UserProvider>
+              <CustomThemeProvider>
+                <AuthGuard>
+                  <>{appContent}</>
+                </AuthGuard>
+              </CustomThemeProvider>
+            </UserProvider>
+          </ClientProvider>
+        </RegisterProvider>
+      </body>
+    </html>
   );
 }

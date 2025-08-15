@@ -1,43 +1,54 @@
-'use server'
+"use server";
 
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
 
 export interface ISessionStorage {
-  sessionToken: string | null
-  uid: string | null
+  sessionToken: string | null;
+  uid: string | null;
+  hasCourse: boolean | null;
 }
 
 export const setSessionStorageCookies = async ({
   sessionToken,
   uid,
+  hasCourse,
 }: ISessionStorage): Promise<void> => {
-  const cookieStore = cookies()
-  const isProduction = process.env.NODE_ENV === 'production'
-  cookieStore.set('sessionToken', sessionToken || '', {
+  const cookieStore = cookies();
+  const isProduction = process.env.NODE_ENV === "production";
+  cookieStore.set("sessionToken", sessionToken || "", {
     httpOnly: true,
     secure: isProduction,
-    sameSite: 'strict',
-  })
-  cookieStore.set('uid', uid || '', {
+    sameSite: "strict",
+  });
+  cookieStore.set("uid", uid || "", {
     httpOnly: true,
     secure: isProduction,
-    sameSite: 'strict',
-  })
-}
+    sameSite: "strict",
+  });
+  cookieStore.set("hasCourse", String(hasCourse ?? false), {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: "strict",
+  });
+};
 
 export const getSessionStorageCookies = async (): Promise<ISessionStorage> => {
-  const cookieStore = cookies()
-  const sessionToken = cookieStore.get('sessionToken')
-  const uid = cookieStore.get('uid')
+  const cookieStore = cookies();
+  const sessionToken = cookieStore.get("sessionToken");
+  const uid = cookieStore.get("uid");
+  const hasCourse = cookieStore.get("hasCourse");
   return {
     sessionToken: sessionToken?.value || null,
     uid: uid?.value || null,
-  }
-}
+    hasCourse: hasCourse ? hasCourse.value === "true" : null,
+  };
+};
+
 
 export const removeSessionStorageCookies = async (): Promise<void> => {
-  const cookieStore = cookies()
-  cookieStore.delete('sessionToken')
-  cookieStore.delete('uid')
-  cookieStore.delete('embedded')
-}
+  const cookieStore = cookies();
+  cookieStore.delete("sessionToken");
+  cookieStore.delete("uid");
+  cookieStore.delete("hasCourse");
+  cookieStore.delete("embedded");
+};

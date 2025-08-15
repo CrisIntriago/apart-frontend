@@ -5,6 +5,7 @@ export interface StudentProfile {
   date_of_birth: string;
   photo: string | null;
   country: string;
+  email: string;
   languages: {
     language: {
       id: number;
