@@ -1,5 +1,18 @@
+import { POST } from '../route.js';
 
-import { POST } from '../route.mjs';
+// Mock suscriptionPlans to provide expected priceId values
+jest.mock('@/constants/suscriptionPlans', () => ({
+  plans: {
+    mensual: { priceId: 'price_1Rvgga2ZhqvpKINePwWLyFpY' },
+    anual: { priceId: 'price_1RvhCf2ZhqvpKINeQQ9Z2AQX' },
+  },
+}));
+
+
+// Mock next/headers to avoid Next.js request context error
+jest.mock('next/headers', () => ({
+  headers: () => new Map([['stripe-signature', 'test']]),
+}));
 
 const mockSession = {
   id: 'cs_test',

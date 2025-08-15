@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npx jest src/app/api/webhook/stripe/__tests__/route.test.mjs"
+    "test": "npx jest"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

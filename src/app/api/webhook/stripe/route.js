@@ -54,9 +54,9 @@ export async function POST(req) {
 				console.log('plans.mensual.priceId:', plans.mensual.priceId);
 				console.log('plans.anual.priceId:', plans.anual.priceId);
 				if (plans.mensual.priceId === priceId) {
-					planType = "MONTHLY";
+					planType = "monthly";
 				} else if (plans.anual.priceId === priceId) {
-					planType = "ANNUAL";
+					planType = "annual";
 				}
 
 				if (planType) {
