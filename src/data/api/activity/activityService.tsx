@@ -18,6 +18,46 @@ export type ActivitySubmissionBody =
   | MatchingAnswer
   | OrderAnswer;
 
+export interface LeaderboardEntry {
+  user_id: number;
+  username: string;
+  full_name: string;
+  total_points: number;
+  activities_count: number;
+  position: number;
+}
+
+export function useLeaderboardTop10(
+  moduleId?: number,
+  timeWindow: "day" | "week" | "month" | "all" = "all"
+) {
+  const { session } = useAccountStore();
+
+  return useQuery<LeaderboardEntry[], unknown>({
+    queryKey: ["leaderboard-top10", moduleId, timeWindow],
+    queryFn: async () => {
+      const token = session?.sessionToken;
+      if (!token) throw new Error("Token de sesión no disponible");
+
+      const response = await get<LeaderboardEntry[]>({
+        path: `/activities/leaderboard/top10/`,
+        queryParameters: {
+          ...(moduleId ? { module_id: moduleId.toString() } : {}),
+          time_window: timeWindow,
+        },
+        config: {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        },
+      });
+
+      return response.data ?? [];
+    },
+    enabled: !!session?.sessionToken,
+  });
+}
+
 export function useActivitiesByModule(courseId: number, moduleId: number) {
   return useQuery<Activity[], unknown>({
     queryKey: ['activities-by-module', courseId, moduleId],

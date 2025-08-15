@@ -7,59 +7,39 @@ import { useExamService, ExamResponse } from "@/data/api/exam/examService";
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import { useCourseProgress } from "@/data/api/course/courseService";
+import examImage from "@images/clip-path.png";
+import LoaderComponent from "@/components/ui/loaderComponent";
 
 const DashboardPage = () => {
+  
   const { user: userData, isLoading: userLoading } = useUser();
 
-  if (userLoading) {
-    return <p className="p-6">Cargando usuario...</p>;
-  }
-
-  const courseId = userData?.course.id ?? null;
+  const courseId = userData?.course.id ?? -1;
   const courseName = userData?.course.name ?? "Curso sin nombre";
 
   const { getModulesByCourseId } = useModuleService();
   const { getExamsByCourseId } = useExamService();
+  const modulesQuery = getModulesByCourseId(courseId);
+  const examsQuery = getExamsByCourseId(courseId);
+  const progressQuery = useCourseProgress(courseId);
 
-  const {
-    data: modulesData,
-    isLoading: modulesLoading,
-    error: modulesError,
-  } = courseId
-    ? getModulesByCourseId(courseId)
-    : { data: null, isLoading: false, error: null };
-
-  const {
-    data: examsData,
-    isLoading: examsLoading,
-    error: examsError,
-  } = courseId
-    ? getExamsByCourseId(courseId)
-    : { data: null, isLoading: false, error: null };
-
-  const {
-    data: progressData,
-    isLoading: progressLoading,
-    error: progressError,
-  } = courseId
-    ? useCourseProgress(courseId)
-    : { data: null, isLoading: false, error: null };
-
-  if (modulesLoading || examsLoading || progressLoading) {
-    return <p className="p-6">Cargando módulos y exámenes...</p>;
+  if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
+    return <LoaderComponent />;
   }
 
-  if (modulesError || progressError) {
+  if (modulesQuery.error || progressQuery.error) {
     return <p className="p-6 text-red-500">Error al cargar datos del curso.</p>;
   }
-  if (examsError) {
+  if (examsQuery.error) {
     return <p className="p-6 text-red-500">Error al cargar los exámenes.</p>;
   }
 
-  const modules = modulesData?.data ?? [];
-  const exams = examsData?.data ?? [];
-  const courseProgress = progressData?.overall?.percent ?? 0;
-  const modulesProgress = progressData?.modules ?? [];
+const modules = Array.isArray(modulesQuery.data?.data) ? modulesQuery.data.data : [];
+const exams = Array.isArray(examsQuery.data?.data) ? examsQuery.data.data : [];
+const courseProgress = progressQuery.data?.overall?.percent ?? 0;
+const modulesProgress = Array.isArray(progressQuery.data?.modules)
+  ? progressQuery.data.modules
+  : [];
 
   const parcialExam = exams.find((e) => e.type.toLowerCase() === "midterm");
   const finalExam = exams.find((e) => e.type.toLowerCase() === "final");
@@ -73,102 +53,137 @@ const DashboardPage = () => {
     ...(finalExam ? [finalExam] : []),
   ];
 
+  const linePositionLeft = 46;
+
   return (
     <main className="min-h-screen bg-[#E3E3E3] py-10 px-4 flex justify-center">
       <section className="w-full max-w-xl space-y-8">
         <div className="bg-white rounded-xl shadow flex items-center gap-2 px-8 py-3">
           <AlignJustify size={18} />
-          <span className="text-sm font-semibold text-gray-800">
-            {courseName}
-          </span>
+          <span className="text-sm font-semibold text-gray-800">{courseName}</span>
         </div>
 
         <div className="bg-white rounded-xl shadow px-8 py-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Progreso</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Contenido</h2>
 
           <div className="w-full border-black border-2 rounded-full h-4 mb-6 overflow-hidden">
-            <div
-              className="h-full bg-[#996C52]"
-              style={{ width: `${courseProgress}%` }}
-            ></div>
+            <div className="h-full bg-[#996C52]" style={{ width: `${courseProgress}%` }} />
           </div>
 
-          <div className="relative ml-10">
-            <div className="flex flex-col space-y-8 relative">
-              {combinedItems.map((item, index) => {
+          <div className="flex flex-col w-full items-start">
+            {combinedItems.length === 0 ? (
+              <p className="text-center text-gray-500 font-medium py-6">
+                No hay contenido para este curso actualmente.
+              </p>
+            ) : (
+              combinedItems.map((item, index) => {
                 const isExam = "type" in item;
-                const isLast = index === combinedItems.length - 1;
-                const lineLeftPosition = 46;
-
-                const moduleCompleted =
-                  !isExam &&
-                  modulesProgress.find((m) => m.id === item.id)?.completed ===
-                    modulesProgress.find((m) => m.id === item.id)?.total;
+                const moduleData = !isExam ? modulesProgress.find((m) => m.id === item.id) : null;
+                const moduleCompleted = moduleData && moduleData.completed === moduleData.total;
+                const examBlocked = isExam && !item.has_attempts_left;
 
                 return (
-                  <Link
+                  <div
                     key={isExam ? `exam-${item.id}` : item.id}
-                    href={isExam ? `/exam/${item.id}` : `/module/${item.id}`}
-                    className={`flex items-center gap-4 relative bg-white rounded-xl transition duration-300 ease-in-out hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02] ${
-                      isExam ? "border-2 border-black" : ""
-                    }`}
-                    style={{
-                      paddingLeft: "90px",
-                      paddingTop: "12px",
-                      paddingBottom: "12px",
-                      marginLeft: "12px",
-                    }}
+                    className="w-full flex flex-col items-start"
                   >
-                    {!isLast && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          left: lineLeftPosition,
-                          top: "100%",
-                          width: 2,
-                          height: 40,
-                          backgroundColor: "black",
-                          zIndex: 0,
-                        }}
-                      />
-                    )}
-
-                    {!isExam && (
-                      <div
-                        className="relative z-10 w-[60px] h-[60px]"
-                        style={{ position: "absolute", left: "16px" }}
-                      >
-                        <Image
-                          src={item.image || "/default-module-image.png"}
-                          alt={item.name}
-                          fill
-                          className="rounded-full object-cover border-2 border-black"
+                    {index > 0 && (
+                      <div className="relative w-full h-10 flex justify-start">
+                        <div
+                          style={{
+                            width: 2,
+                            height: "100%",
+                            backgroundColor: "black",
+                            marginLeft: linePositionLeft,
+                          }}
                         />
                       </div>
                     )}
 
-                    <div className="flex flex-col z-10">
-                      <h3 className="text-sm font-bold text-gray-900">
-                        {isExam
-                          ? item.type.toLowerCase() === "midterm"
-                            ? "Examen Parcial"
-                            : "Examen Final"
-                          : item.name}
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {isExam ? item.title : item.description}
-                      </p>
-                    </div>
+                    <div
+                      className={`relative w-full flex items-center gap-4 bg-white rounded-xl transition duration-300 ease-in-out ${
+                        examBlocked
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02]"
+                      }`}
+                      style={{
+                        padding: "12px 16px 12px 90px",
+                        boxSizing: "border-box",
+                      }}
+                    >
+                      <div
+                        className="relative w-[60px] h-[60px] flex-shrink-0 z-10"
+                        style={{
+                          position: "absolute",
+                          left: 16,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
+                        <Image
+                          src={isExam ? examImage : item.image || "/default-module-image.png"}
+                          alt={isExam ? "Examen" : item.name}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      </div>
 
-                    {!isExam && moduleCompleted && (
-                      <span className="ml-auto mr-4 px-2 py-1 bg-green-200 text-green-800 text-xs font-semibold rounded">
-                        Completado
+                      <div className="flex flex-col ml-4 z-10">
+                        <h3 className="text-sm font-bold text-gray-900">
+                          {isExam
+                            ? item.type.toLowerCase() === "midterm"
+                              ? "Examen Parcial"
+                              : "Examen Final"
+                            : item.name}
+                        </h3>
+                        <p className="text-xs text-gray-500">
+                          {isExam ? item.title : item.description}
+                        </p>
+                      </div>
+
+                      <span
+                        className={`ml-auto px-2 py-1 text-center text-xs font-semibold rounded z-10 ${
+                          isExam
+                            ? examBlocked
+                              ? "bg-green-200 text-green-800"
+                              : "bg-gray-200 text-gray-600"
+                            : moduleCompleted
+                            ? "bg-green-200 text-green-800"
+                            : "bg-gray-200 text-gray-600"
+                        }`}
+                      >
+                        {isExam ? (
+                          examBlocked ? (
+                            <>
+                              Completado
+                              <br />
+                              Puntaje: {Math.floor(Number(item.user_percentage))}/100
+                            </>
+                          ) : (
+                            <>
+                              Puntaje actual: {Math.floor(Number(item.user_percentage))}/100
+                              <br />
+                              {item.remaining_attempts}/{item.attempts_allowed} intentos
+                            </>
+                          )
+                        ) : moduleCompleted ? (
+                          "Completado"
+                        ) : (
+                          "Pendiente"
+                        )}
                       </span>
-                    )}
-                  </Link>
+
+                      {!examBlocked && (
+                        <Link
+                          href={isExam ? `/exam/${item.id}` : `/module/${item.id}`}
+                          className="absolute inset-0 z-0"
+                        />
+                      )}
+                    </div>
+                  </div>
                 );
-              })}
-            </div>
+              })
+            )}
           </div>
         </div>
       </section>

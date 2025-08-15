@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { StudentProfile } from "@/types/user";
 import { useStudentProfile } from "@/data/api/student/studentService";
 import { useAccountStore } from "@/data/store/accountStore";
+import LoaderComponent from "@/components/ui/loaderComponent";
 
 interface UserContextType {
   user: StudentProfile | null;
@@ -39,8 +40,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [data]);
 
-  if (isLoading) return <div className="p-8 text-center">Cargando perfil...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">Error al cargar perfil</div>;
+  if (isLoading) return <LoaderComponent />
+;
+  if (error) return <LoaderComponent />
+  ;
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoading, error }}>

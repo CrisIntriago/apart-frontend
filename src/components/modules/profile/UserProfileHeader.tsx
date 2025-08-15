@@ -3,6 +3,7 @@ import Image from "next/image";
 import { MapPin } from "lucide-react";
 import profileImage from "@images/default-profile.png";
 import { useUser } from "@/context/UserContext";
+import LoaderComponent from "@/components/ui/loaderComponent";
 
 const UserProfileHeader = ({
   activeSection,
@@ -21,9 +22,8 @@ const UserProfileHeader = ({
 
   if (isLoading || !user) {
     return (
-      <div className="bg-white rounded-xl p-6 text-center drop-shadow-lg w-full">
-        Cargando perfil...
-      </div>
+      <LoaderComponent />
+
     );
   }
 

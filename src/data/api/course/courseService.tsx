@@ -76,8 +76,11 @@ export function useCourseProgress(courseId: number) {
       );
     },
     enabled: !!courseId,
+    refetchOnWindowFocus: true,
+    refetchOnMount: "always",
   });
 }
+
 
 export function useCourseStudents(courseId: number) {
   return useQuery<CourseStudent[], unknown>({

@@ -1,86 +1,93 @@
 "use client";
 
 import { Medal } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import Imagen from "@images/classmate.png";
-const mockTopScores = [
-  {
-    id: 1,
-    name: "Juan Pérez",
-    avatar: Imagen,
-    score: 980,
-  },
-  {
-    id: 2,
-    name: "María López",
-    avatar: Imagen,
-    score: 920,
-  },
-  {
-    id: 3,
-    name: "Carlos García",
-    avatar: Imagen,
-    score: 890,
-  },
-  {
-    id: 4,
-    name: "Ana Torres",
-    avatar: Imagen,
-    score: 860,
-  },
-  {
-    id: 5,
-    name: "Luis Ortega",
-    avatar: Imagen,
-    score: 850,
-  },
-];
+import { useState } from "react";
+import { useUser } from "@/context/UserContext";
+import { useLeaderboardTop10 } from "@/data/api/activity/activityService";
+import LoaderComponent from "@/components/ui/loaderComponent";
+
+const timeWindows = [
+  { value: "day", label: "Hoy" },
+  { value: "week", label: "Semana" },
+  { value: "month", label: "Mes" },
+  { value: "all", label: "Todos" },
+] as const;
 
 const CommunityPage = () => {
-  const courseId = 1;
-  const [topUsers, setTopUsers] = useState<typeof mockTopScores>([]);
+  const { user: userData, isLoading: userLoading } = useUser();
+  const [timeWindow, setTimeWindow] = useState<"day" | "week" | "month" | "all">("day");
 
-  useEffect(() => {
-    setTopUsers(mockTopScores);
-  }, [courseId]);
+  const { data: leaderboard = [], isLoading: leaderboardLoading } =
+    useLeaderboardTop10(undefined, timeWindow);
+
+  if (userLoading) return <LoaderComponent />;
 
   return (
     <main className="min-h-screen bg-[#E3E3E3] py-10 px-4 flex justify-center">
       <section className="w-full max-w-xl space-y-6">
         <div className="bg-white rounded-xl shadow px-6 py-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Medal size={20} className="text-yellow-600" />
-            <h2 className="text-lg font-bold text-gray-900">Top estudiantes</h2>
+          <div className="flex flex-col items-center mb-6">
+            <Medal size={28} className="text-yellow-600 mb-2" />
+            <h2 className="text-xl font-bold text-gray-900 text-center">
+              Leaderboard global
+            </h2>
           </div>
 
-          <ul className="space-y-4">
-            {topUsers.map((user, index) => (
-              <li
-                key={user.id}
-                className="flex items-center justify-between border-b pb-2"
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            {timeWindows.map((tw) => (
+              <button
+                key={tw.value}
+                onClick={() => setTimeWindow(tw.value)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors duration-200 ${
+                  timeWindow === tw.value
+                    ? "bg-black text-white"
+                    : "bg-white text-black border-gray-400 hover:bg-gray-100"
+                }`}
               >
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-bold text-gray-700 w-5">
-                    #{index + 1}
-                  </span>
-                  <Image
-                    src={user.avatar}
-                    alt={user.name}
-                    width={40}
-                    height={40}
-                    className="rounded-full border border-gray-300"
-                  />
-                  <div>
-                    <p className="text-sm font-semibold text-gray-900">
-                      {user.name}
-                    </p>
-                    <p className="text-xs text-gray-500">Puntaje: {user.score}</p>
-                  </div>
-                </div>
-              </li>
+                {tw.label}
+              </button>
             ))}
-          </ul>
+          </div>
+
+          {leaderboardLoading ? (
+            <LoaderComponent />
+          ) : leaderboard.length === 0 ? (
+            <LoaderComponent />
+          ) : (
+            <ul className="space-y-4">
+              {leaderboard.map((user, index) => {
+                const isCurrentUser = user.username === userData?.first_name;
+                return (
+                  <li
+                    key={user.user_id}
+                    className="flex items-center justify-between border-b pb-2"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`text-sm font-bold w-6 text-center ${
+                          index === 0
+                            ? "text-yellow-500"
+                            : index === 1
+                            ? "text-gray-500"
+                            : index === 2
+                            ? "text-orange-500"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        #{index + 1}
+                      </span>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {user.full_name} {isCurrentUser && "(Yo)"}
+                        </p>
+                        <p className="text-xs text-gray-500">Puntaje: {user.total_points}</p>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </section>
     </main>
