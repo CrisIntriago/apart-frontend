@@ -8,8 +8,11 @@ import { RegisterProvider } from "@/context/RegisterContext";
 import { UserProvider} from "@/context/UserContext";
 
 export const metadata: Metadata = {
-  title: "Apart Web App",
-  description: "A modern web application for learning english",
+  title: "Apart - La realidad es flexible",
+  description: "Cambia tu vida, aprende inglés",
+  openGraph: {
+    images: `https://d362kojubhlm1d.cloudfront.net/LandingPagepreview.webp`,
+  },
 };
 
 export default async function RootLayout({
