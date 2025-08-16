@@ -6,12 +6,14 @@ export interface ISessionStorage {
   sessionToken: string | null;
   uid: string | null;
   hasCourse: boolean | null;
+  hasAccess?: boolean | null;
 }
 
 export const setSessionStorageCookies = async ({
   sessionToken,
   uid,
   hasCourse,
+  hasAccess,
 }: ISessionStorage): Promise<void> => {
   const cookieStore = cookies();
   const isProduction = process.env.NODE_ENV === "production";
@@ -30,6 +32,11 @@ export const setSessionStorageCookies = async ({
     secure: isProduction,
     sameSite: "strict",
   });
+  cookieStore.set("hasAccess", String(hasAccess ?? false), {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: "strict",
+  });
 };
 
 export const getSessionStorageCookies = async (): Promise<ISessionStorage> => {
@@ -37,10 +44,12 @@ export const getSessionStorageCookies = async (): Promise<ISessionStorage> => {
   const sessionToken = cookieStore.get("sessionToken");
   const uid = cookieStore.get("uid");
   const hasCourse = cookieStore.get("hasCourse");
+  const hasAccess = cookieStore.get("hasAccess");
   return {
     sessionToken: sessionToken?.value || null,
     uid: uid?.value || null,
     hasCourse: hasCourse ? hasCourse.value === "true" : null,
+    hasAccess: hasAccess ? hasAccess.value === "true" : null,
   };
 };
 
@@ -51,4 +60,5 @@ export const removeSessionStorageCookies = async (): Promise<void> => {
   cookieStore.delete("uid");
   cookieStore.delete("hasCourse");
   cookieStore.delete("embedded");
+  cookieStore.delete("hasAccess");
 };

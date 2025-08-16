@@ -9,6 +9,8 @@ interface PlanCardProps {
     badgeText?: string;
     isSpecialOffer?: boolean;
     email?: string;
+    type?: "monthly" | "annual";
+    bulletPoints : string[]
 }
 
 export const PlanCard = ({
@@ -16,42 +18,63 @@ export const PlanCard = ({
     description,
     price,
     link,
-    badgeText,
     isSpecialOffer = false,
     email,
+    type = "monthly",
+    bulletPoints,
 }: PlanCardProps) => {
 
     const payment_url = email ? `${link}?prefilled_email=${email}` : link;
 
     return (
-        <div className={`bg-white rounded-2xl shadow-xl relative overflow-hidden ${isSpecialOffer ? "border-2 border-gray-200" : "border-2 border-purple-200"}`}>
-            {badgeText && (
-                <div className="absolute top-4 right-4">
-                    <div className="bg-red-500 text-white">{badgeText}</div>
+    <div className={`bg-white rounded-2xl shadow-xl relative ${isSpecialOffer ?  "border-4 border-purple-400":"border-2 border-gray-200" } w-[340px] overflow-visible`}> 
+            {isSpecialOffer && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                    <span className="bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-bold px-5 py-1 rounded-full shadow-lg border-2 border-white">Más Popular</span>
                 </div>
             )}
-            <div className="p-6">
+            <div className="p-6 flex flex-col h-full min-h-[500px]">
                 <div className="text-center mb-6">
-                    <h3 className="text-lg font-semibold text-gray-600 mb-2">{title}</h3>
-                    <div className="text-4xl font-bold text-gray-900">{price}</div>
-                </div>
-                <div className="space-y-3 mb-6">
-                    <p className="text-gray-700">{description}</p>
+                    <h3 className="text-3xl font-bold mb-5">{title}</h3>
+                    <div className="text-5xl font-semibold text-gray-900">${price}
+                        <span className="text-sm text-gray-700">
+                            {type === "monthly" ? "/mes" : "/año"}
+                        </span>
+                    </div>
+                    {type === "annual" && (
+                        <div className="mt-2">
+                            <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                                Ahorra $58
+                            </span>
+                        </div>
+                    )}
                 </div>
 
-                <Button
-                    onClick={() => {
-                        window.open(payment_url, '_blank');
-                    }}
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium py-3 rounded-xl"
-                >
-                    Suscribirse
-                </Button>
-
-                <div className="mt-6">
-                    <a href={link} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">
-                        Más información
-                    </a>
+                <div className="flex flex-col mb-6 flex-grow">
+                    <div className="min-h-[48px] flex items-start">
+                        <p className="text-gray-700">{description}</p>
+                    </div>
+                    {bulletPoints && bulletPoints.length > 0 && (
+                        <ul className="mt-4 space-y-2 text-left">
+                            {bulletPoints.map((point, idx) => (
+                                <li key={idx} className="flex items-center gap-2 text-gray-700">
+                                    <span className="inline-block w-2 h-2 bg-purple-500 rounded-full"></span>
+                                    <span>{point}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+                <div className="mt-auto">
+                    <Button
+                        onClick={() => {
+                            window.open(payment_url, '_blank');
+                        }}
+                        className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 font-normal py-3 rounded-xl normal-case"
+                        sx={{ color: 'white', textTransform: 'none', fontWeight: 400 }}
+                    >
+                        Comenzar ahora
+                    </Button>
                 </div>
             </div>
         </div>
