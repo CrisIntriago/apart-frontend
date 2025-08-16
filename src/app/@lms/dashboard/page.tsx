@@ -14,12 +14,19 @@ import OfferComponents from "@/components/modules/OfferComponents";
 const DashboardPage = () => {
 
   const { user: userData, isLoading: userLoading } = useUser();
+  const { getModulesByCourseId } = useModuleService();
+  const { getExamsByCourseId } = useExamService();
+  // courseId puede ser undefined si no hay curso, pero los hooks deben estar siempre en el mismo orden
+  const courseId = userData?.course?.id;
+  const courseName = userData?.course?.name ?? "Curso sin nombre";
+  const modulesQuery = getModulesByCourseId(courseId ?? -1);
+  const examsQuery = getExamsByCourseId(courseId ?? -1);
+  const progressQuery = useCourseProgress(courseId ?? -1);
 
   if (!userData?.has_access) {
     return (
       <div className="mt-10">
         <OfferComponents email={userData?.email} descripcion="Con los fáciles planes puedes aprender idiomas" titulo="Adquiere tu acceso a Apart!"/>
-
       </div>
     )
   }
@@ -34,15 +41,6 @@ const DashboardPage = () => {
       </main>
     );
   }
-
-  const courseId = userData.course.id;
-  const courseName = userData.course.name ?? "Curso sin nombre";
-
-  const { getModulesByCourseId } = useModuleService();
-  const { getExamsByCourseId } = useExamService();
-  const modulesQuery = getModulesByCourseId(courseId);
-  const examsQuery = getExamsByCourseId(courseId);
-  const progressQuery = useCourseProgress(courseId);
 
   if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
     return <LoaderComponent />;
