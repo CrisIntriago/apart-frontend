@@ -80,17 +80,23 @@ const StepOne = () => {
       >
         <h2 className="text-2xl font-semibold mb-2 text-center">Crea tu cuenta</h2>
 
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              _handleRegisterGoogle(credentialResponse);
-              console.log("Google login successful:", credentialResponse);
-            }}
-            onError={() => console.log('Login Failed')}
-            useOneTap
-          />
-          <Divider className="my-4">o</Divider>
-        </GoogleOAuthProvider>
+        <div className="w-full">
+
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+            <div className="w-full">
+
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  _handleRegisterGoogle(credentialResponse);
+                  console.log("Google login successful:", credentialResponse);
+                }}
+                onError={() => console.log('Login Failed')}
+                useOneTap
+              />
+            </div>
+            <Divider className="my-4">o</Divider>
+          </GoogleOAuthProvider>
+        </div>
 
 
         <TextField

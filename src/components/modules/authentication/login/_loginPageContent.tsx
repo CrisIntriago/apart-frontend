@@ -17,7 +17,7 @@ const LoginPageContent = () => {
   const { login } = useAuthService();
   const router = useRouter();
   const { formData, setFormData } = useRegister();
-  
+
   useEffect(() => {
     router.replace(PATHS.LOGIN);
   }, [router]);
@@ -85,19 +85,19 @@ const LoginPageContent = () => {
         <h2 className="text-2xl font-semibold mb-6">Inicia sesión</h2>
 
         <form onSubmit={_handleLogin} className="space-y-4">
-
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
-            <div className="flex justify-center w-full">
-              <div className="min-w-full">
+          <div className="w-full">
+            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+              <div className="w-full">
                 <GoogleLogin
                   onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
                   onError={() => console.log('Login Failed')}
                   useOneTap
                 />
               </div>
-            </div>
-            <Divider className="my-4">o</Divider>
-          </GoogleOAuthProvider>
+            </GoogleOAuthProvider>
+          </div>
+
+          <Divider className="my-4">o</Divider>
 
           <TextField
             label="Correo electrónico"
