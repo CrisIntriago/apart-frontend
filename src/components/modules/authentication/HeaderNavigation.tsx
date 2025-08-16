@@ -11,19 +11,19 @@ const HeaderNavigation = () => {
     pathname === path ? "border-b-2 border-black" : "";
 
   return (
-    <header className="w-full flex items-center justify-between px-6 py-4">
-      <h1 className="text-xl font-bold">APART</h1>
+    <header className="w-full flex items-center justify-between px-16 py-4">
+      <h1 className="sm:text-4xl text-2xl font-bold">APART</h1>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 font-guru">
         <Link
           href={PATHS.REGISTER.STEP_ONE}
-          className={`font-medium hover:opacity-80 ${isActive(PATHS.REGISTER.STEP_ONE)}`}
+          className={`font-bold text-lg hover:opacity-80 ${isActive(PATHS.REGISTER.STEP_ONE)}`}
         >
           Registro
         </Link>
         <Link
           href={PATHS.LOGIN}
-          className={`font-medium hover:opacity-80 ${isActive(PATHS.LOGIN)}`}
+          className={`font-bold text-lg hover:opacity-80 ${isActive(PATHS.LOGIN)}`}
         >
           Iniciar Sesión
         </Link>
