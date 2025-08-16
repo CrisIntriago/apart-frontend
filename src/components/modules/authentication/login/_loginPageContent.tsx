@@ -51,13 +51,13 @@ const LoginPageContent = () => {
           onError: (error: any) => {
             if (error.status === 404) {
               const google_data = error.data.user;
-              console.log(google_data)
               const [firstName, ...rest] = google_data.username.split(" ");
               const lastName = rest.join(" ");
               setFormData({
                 ...formData,
                 email: google_data.email,
                 username: google_data.username,
+                photo: google_data.photo,
                 firstName: firstName || "",
                 lastName: lastName || "",
                 password: google_data.password,

@@ -108,6 +108,7 @@ const StepTwo = () => {
       country: formData.country,
       date_of_birth: formData.birthDate,
       languages: selectedLanguages,
+      photo: formData.photo || "",
     };
 
     register.mutate(payload, {
