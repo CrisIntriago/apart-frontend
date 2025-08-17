@@ -90,13 +90,19 @@ const LoginPageContent = () => {
         <form onSubmit={_handleLogin} className="space-y-4 flex flex-col items-center w-full">
           <div className="flex justify-center items-center w-full">
             <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
-              <div className="w-full">
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
-                  onError={() => console.log('Login Failed')}
-                  useOneTap
-                />
-              </div>
+                <div className="w-full">
+                  <GoogleLogin
+                    onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
+                    onError={() => console.log('Login Failed')}
+                    useOneTap
+                    type="standard"
+                    width="100%"
+                    theme="outline"
+                    size="large"
+                    text="continue_with"
+                    shape="rectangular"
+                  />
+                </div>
             </GoogleOAuthProvider>
           </div>
 
