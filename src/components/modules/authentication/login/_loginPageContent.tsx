@@ -86,28 +86,21 @@ const LoginPageContent = () => {
 
       <main className="w-full max-w-md px-6 text-center">
         <h2 className="text-2xl font-semibold mb-6">Inicia sesión</h2>
+        
+        <div className="flex justify-center items-center w-full">
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+            <div className="w-full">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
+                onError={() => console.log('Login Failed')}
+                useOneTap
+              />
+            </div>
+          </GoogleOAuthProvider>
+        </div>
 
         <form onSubmit={_handleLogin} className="space-y-4 flex flex-col items-center w-full">
-          <div className="flex justify-center items-center w-full">
-            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
-                <div className="w-full">
-                  <GoogleLogin
-                    onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
-                    onError={() => console.log('Login Failed')}
-                    useOneTap
-                    type="standard"
-                    width="100%"
-                    theme="outline"
-                    size="large"
-                    text="continue_with"
-                    shape="rectangular"
-                  />
-                </div>
-            </GoogleOAuthProvider>
-          </div>
-
           <Divider className="my-4">o</Divider>
-
           <TextField
             label="Correo electrónico"
             type="email"
@@ -162,8 +155,8 @@ const LoginPageContent = () => {
           </Typography>
 
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 };
 
