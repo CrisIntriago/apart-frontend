@@ -73,6 +73,7 @@ const StepOne = () => {
 
   return (
     <LayoutRegister>
+      <div className="w-full flex items-center justify-center">
         <GoogleLogin
           onSuccess={(credentialResponse) => {
             _handleRegisterGoogle(credentialResponse);
@@ -80,7 +81,9 @@ const StepOne = () => {
           }}
           onError={() => console.log('Login Failed')}
           useOneTap
+          width="400"
         />
+      </div>
       <form
         onSubmit={handleNext}
         className="space-y-4 bg-white px-6 py-2 rounded-xl w-full"
