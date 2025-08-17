@@ -5,11 +5,14 @@ import AuthGuard from "@/components/guards/authGuard";
 import { getSessionStorageCookies } from "@/data/serverActions/authenticationCookiesAction";
 import { ClientProvider } from "@/data/api/abstractApiClient";
 import { RegisterProvider } from "@/context/RegisterContext";
-import { UserProvider } from "@/context/UserContext";
+import { UserProvider} from "@/context/UserContext";
 
 export const metadata: Metadata = {
-  title: "Apart Web App",
-  description: "A modern web application for learning english",
+  title: "Apart - La realidad es flexible",
+  description: "Cambia tu vida, aprende inglés",
+  openGraph: {
+    images: `https://d362kojubhlm1d.cloudfront.net/LandingPagepreview.webp`,
+  },
 };
 
 export default async function RootLayout({
@@ -23,8 +26,9 @@ export default async function RootLayout({
 }>) {
   const session = await getSessionStorageCookies();
   const userIsAuthenticated = session?.sessionToken !== null;
-  const hasCourse = session?.hasCourse;
-  const appContent = (userIsAuthenticated && !hasCourse) ? no_course : userIsAuthenticated ? lms : authentication;
+  const appContent =  userIsAuthenticated ? lms : authentication;
+
+
   return (
     <html lang="en">
       <body className="antialiased">

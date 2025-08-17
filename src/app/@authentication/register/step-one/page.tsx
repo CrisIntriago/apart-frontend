@@ -76,21 +76,25 @@ const StepOne = () => {
     <LayoutRegister>
       <form
         onSubmit={handleNext}
-        className="space-y-4 bg-white px-6 py-2 rounded-xl"
+        className="space-y-4 bg-white px-6 py-2 rounded-xl w-full"
       >
         <h2 className="text-2xl font-semibold mb-2 text-center">Crea tu cuenta</h2>
 
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              _handleRegisterGoogle(credentialResponse);
-              console.log("Google login successful:", credentialResponse);
-            }}
-            onError={() => console.log('Login Failed')}
-            useOneTap
-          />
-          <Divider className="my-4">o</Divider>
-        </GoogleOAuthProvider>
+        <div className="flex justify-center items-center w-full">
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+            <div className="w-full">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  _handleRegisterGoogle(credentialResponse);
+                  console.log("Google login successful:", credentialResponse);
+                }}
+                onError={() => console.log('Login Failed')}
+                useOneTap
+              />
+            </div>
+          </GoogleOAuthProvider>
+        </div>
+        <Divider className="my-4">o</Divider>
 
 
         <TextField

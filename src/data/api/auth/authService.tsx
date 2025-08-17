@@ -19,6 +19,7 @@ interface RegisterPayload {
   date_of_birth?: string;
   languages?: string[];
   google_token?: string;
+  photo?: string;
 }
 
 interface AuthResponse {
@@ -64,6 +65,7 @@ export function useAuthService() {
       if (payload.date_of_birth) body.date_of_birth = payload.date_of_birth;
       if (payload.languages) body.languages = payload.languages;
       if (payload.google_token) body.google_token = payload.google_token;
+      if (payload.photo) body.photo = payload.photo;
       return post<AuthResponse>({
         path: "/auth/register/",
         body,

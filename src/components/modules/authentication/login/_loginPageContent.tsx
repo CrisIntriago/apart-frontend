@@ -54,13 +54,13 @@ const LoginPageContent = () => {
           onError: (error: any) => {
             if (error.status === 404) {
               const google_data = error.data.user;
-              console.log(google_data);
               const [firstName, ...rest] = google_data.username.split(" ");
               const lastName = rest.join(" ");
               setFormData({
                 ...formData,
                 email: google_data.email,
                 username: google_data.username,
+                photo: google_data.photo,
                 firstName: firstName || "",
                 lastName: lastName || "",
                 password: google_data.password,
@@ -87,19 +87,20 @@ const LoginPageContent = () => {
       <main className="w-full max-w-md px-6 text-center">
         <h2 className="text-2xl font-semibold mb-6">Inicia sesión</h2>
 
-        <form onSubmit={_handleLogin} className="space-y-4">
-          <GoogleOAuthProvider
-            clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}
-          >
-            <GoogleLogin
-              onSuccess={(credentialResponse) =>
-                _handleLoginGoogle(credentialResponse)
-              }
-              onError={() => console.log("Login Failed")}
-              useOneTap
-            />
-            <Divider className="my-4">o</Divider>
-          </GoogleOAuthProvider>
+        <form onSubmit={_handleLogin} className="space-y-4 flex flex-col items-center w-full">
+          <div className="flex justify-center items-center w-full">
+            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+              <div className="w-full">
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
+                  onError={() => console.log('Login Failed')}
+                  useOneTap
+                />
+              </div>
+            </GoogleOAuthProvider>
+          </div>
+
+          <Divider className="my-4">o</Divider>
 
           <TextField
             label="Correo electrónico"

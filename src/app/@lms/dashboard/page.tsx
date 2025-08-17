@@ -9,19 +9,38 @@ import Image from "next/image";
 import { useCourseProgress } from "@/data/api/course/courseService";
 import examImage from "@images/clip-path.png";
 import LoaderComponent from "@/components/ui/loaderComponent";
+import OfferComponents from "@/components/modules/OfferComponents";
 
 const DashboardPage = () => {
-  
+
   const { user: userData, isLoading: userLoading } = useUser();
-
-  const courseId = userData?.course.id ?? -1;
-  const courseName = userData?.course.name ?? "Curso sin nombre";
-
   const { getModulesByCourseId } = useModuleService();
   const { getExamsByCourseId } = useExamService();
-  const modulesQuery = getModulesByCourseId(courseId);
-  const examsQuery = getExamsByCourseId(courseId);
-  const progressQuery = useCourseProgress(courseId);
+  // courseId puede ser undefined si no hay curso, pero los hooks deben estar siempre en el mismo orden
+  const courseId = userData?.course?.id;
+  const courseName = userData?.course?.name ?? "Curso sin nombre";
+  const modulesQuery = getModulesByCourseId(courseId ?? -1);
+  const examsQuery = getExamsByCourseId(courseId ?? -1);
+  const progressQuery = useCourseProgress(courseId ?? -1);
+
+  if (!userData?.has_access) {
+    return (
+      <div className="mt-10">
+        <OfferComponents email={userData?.email} descripcion="Con los fáciles planes puedes aprender idiomas" titulo="Adquiere tu acceso a Apart!"/>
+      </div>
+    )
+  }
+
+  if (!userData?.course) {
+    return (
+      <main className="min-h-screen bg-[#E3E3E3] py-10 px-4 flex justify-center items-center">
+        <div className="bg-white rounded-xl shadow px-8 py-6 text-center">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">No tienes un curso asignado</h2>
+          <p className="text-gray-600">Por favor, contacta a soporte o espera a que se te asigne un curso.</p>
+        </div>
+      </main>
+    );
+  }
 
   if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
     return <LoaderComponent />;
@@ -34,12 +53,12 @@ const DashboardPage = () => {
     return <p className="p-6 text-red-500">Error al cargar los exámenes.</p>;
   }
 
-const modules = Array.isArray(modulesQuery.data?.data) ? modulesQuery.data.data : [];
-const exams = Array.isArray(examsQuery.data?.data) ? examsQuery.data.data : [];
-const courseProgress = progressQuery.data?.overall?.percent ?? 0;
-const modulesProgress = Array.isArray(progressQuery.data?.modules)
-  ? progressQuery.data.modules
-  : [];
+  const modules = Array.isArray(modulesQuery.data?.data) ? modulesQuery.data.data : [];
+  const exams = Array.isArray(examsQuery.data?.data) ? examsQuery.data.data : [];
+  const courseProgress = progressQuery.data?.overall?.percent ?? 0;
+  const modulesProgress = Array.isArray(progressQuery.data?.modules)
+    ? progressQuery.data.modules
+    : [];
 
   const parcialExam = exams.find((e) => e.type.toLowerCase() === "midterm");
   const finalExam = exams.find((e) => e.type.toLowerCase() === "final");
@@ -101,11 +120,10 @@ const modulesProgress = Array.isArray(progressQuery.data?.modules)
                     )}
 
                     <div
-                      className={`relative w-full flex items-center gap-4 bg-white rounded-xl transition duration-300 ease-in-out ${
-                        examBlocked
+                      className={`relative w-full flex items-center gap-4 bg-white rounded-xl transition duration-300 ease-in-out ${examBlocked
                           ? "opacity-50 cursor-not-allowed"
                           : "hover:shadow-lg hover:bg-gray-100 hover:scale-[1.02]"
-                      }`}
+                        }`}
                       style={{
                         padding: "12px 16px 12px 90px",
                         boxSizing: "border-box",
@@ -142,15 +160,14 @@ const modulesProgress = Array.isArray(progressQuery.data?.modules)
                       </div>
 
                       <span
-                        className={`ml-auto px-2 py-1 text-center text-xs font-semibold rounded z-10 ${
-                          isExam
+                        className={`ml-auto px-2 py-1 text-center text-xs font-semibold rounded z-10 ${isExam
                             ? examBlocked
                               ? "bg-green-200 text-green-800"
                               : "bg-gray-200 text-gray-600"
                             : moduleCompleted
-                            ? "bg-green-200 text-green-800"
-                            : "bg-gray-200 text-gray-600"
-                        }`}
+                              ? "bg-green-200 text-green-800"
+                              : "bg-gray-200 text-gray-600"
+                          }`}
                       >
                         {isExam ? (
                           examBlocked ? (

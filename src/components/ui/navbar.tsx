@@ -35,7 +35,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-8">
         <Link
           href={PATHS.USER_COURSES.PROFILE}
-          className="text-3xl sm:text-4xl font-bold"
+          className="sm:text-4xl text-2xl font-bold"
           aria-label="Ir al inicio"
         >
           APART

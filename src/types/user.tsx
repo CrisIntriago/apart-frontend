@@ -6,6 +6,7 @@ export interface StudentProfile {
   photo: string | null;
   country: string;
   email: string;
+  has_access: boolean;
   languages: {
     language: {
       id: number;

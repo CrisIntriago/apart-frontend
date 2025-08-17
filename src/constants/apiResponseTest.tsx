@@ -82,3 +82,77 @@ export const learningRoute = [
         "status": "COMPLETED"
     }
 ];
+
+// export const lesson: Activity[] = [
+//     {
+//         "id": 1,
+//         "type": LearningActivityType.MATCH,
+//         "title": "El gato",
+//         "instructions": "Ordena las palabras para conseguir la oración correcta",
+//         "difficulty": Difficulty.Easy,
+//         "created_at": "2025-06-14T19:28:38.263186Z",
+//         "payload": {
+//             "words": [
+//                 "El",
+//                 "gato",
+//                 "juega",
+//                 "con",
+//                 "los",
+//                 "padres"
+//             ]
+//         }
+//     },
+//     {
+//         "id": 2,
+//         "type": LearningActivityType.FILL,
+//         "title": "Los tiempos",
+//         "instructions": "Selecciona el par de palabras ordenadas",
+//         "difficulty": Difficulty.Hard,
+//         "created_at": "2025-06-14T19:37:22.191836Z",
+//         "payload": {
+//             "pairs": [
+//                 {
+//                     "left": "I",
+//                     "right": "yo"
+//                 },
+//                 {
+//                     "left": "you",
+//                     "right": "tú"
+//                 },
+//                 {
+//                     "left": "he",
+//                     "right": "el"
+//                 },
+//                 {
+//                     "left": "she",
+//                     "right": "ella"
+//                 }
+//             ]
+//         }
+//     },
+//     {
+//         "id": 3,
+//         "type": LearningActivityType.MATCH,
+//         "title": "Forma correcta de responder",
+//         "instructions": "Cual es la forma correcta de responder la siguiente pregunta:\r\nDo you like pizza?",
+//         "difficulty": Difficulty.Medium,
+//         "created_at": "2025-06-14T19:47:19.296450Z",
+//         "payload": {
+//             "choices": [
+//                 {
+//                     "id": 1,
+//                     "text": "Yes, I do"
+//                 },
+//                 {
+//                     "id": 2,
+//                     "text": "No, I am"
+//                 },
+//                 {
+//                     "id": 3,
+//                     "text": "I am Pizza"
+//                 }
+//             ],
+//             "is_multiple": false
+//         }
+//     }
+// ];

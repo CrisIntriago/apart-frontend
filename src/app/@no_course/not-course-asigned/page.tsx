@@ -7,10 +7,20 @@ import { removeSessionStorageCookies } from "@/data/serverActions/authentication
 import { removeAccountState } from "@/data/store/accountStore";
 import { Button } from "@mui/material";
 import { useEffect } from "react";
+import { useUser } from "@/context/UserContext";
+import { PlanCard } from "@/components/suscriptions/planCard";
+import { plans } from "@/constants/suscriptionPlans";
 
 export default function NotCourseAssignedPage() {
   const router = useRouter();
   const { logout } = useAuthService();
+
+  const { user, isLoading } = useUser();
+  const email = user?.email;
+
+  const stripeUrl =
+  "https://billing.stripe.com/p/login/test_3cIcMYf8I7G23Mzb8VeEo00" +
+  (email ? `?prefilled_email=${email}` : "");
 
   useEffect(() => {
       router.replace(PATHS.NOT_COURSE_ASIGNED);
@@ -29,12 +39,6 @@ export default function NotCourseAssignedPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow text-center max-w-md">
-        <h2 className="text-xl font-bold mb-4">Sin curso asignado</h2>
-        <p className="mb-6">
-          Tu cuenta aún no tiene un curso asignado.<br />
-          Por favor comunícate con tu profesor para que te asigne uno.
-        </p>
-
         <Button
           onClick={handleLogoutAndRedirect}
           variant="contained"

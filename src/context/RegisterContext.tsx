@@ -11,7 +11,7 @@ interface RegisterData {
   birthDate: string;
   country: string;
   languages: string;
-  image?: File | null;
+  photo?: string | null;
 }
 
 interface RegisterContextType {
@@ -40,7 +40,7 @@ export const RegisterProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     birthDate: "",
     country: "",
     languages: "",
-    image: null,
+    photo: "",
   };
 
   const [formData, setFormData] = useState<RegisterData>(initialFormData);

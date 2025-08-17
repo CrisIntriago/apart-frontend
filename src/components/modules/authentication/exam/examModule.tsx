@@ -96,7 +96,12 @@ function ExamModule({ id }: ExamModuleProps) {
   if (currentIndex + 1 < activities.length) {
     setCurrentIndex((i) => i + 1);
   } else {
-    handleFinishExam(startExamMutation.data?.attempt_id!);
+    const attemptId = startExamMutation.data?.attempt_id;
+    if (attemptId !== undefined && attemptId !== null) {
+      handleFinishExam(attemptId);
+    } else {
+      alert("No se pudo obtener el attempt_id del examen.");
+    }
   }
 };
 
