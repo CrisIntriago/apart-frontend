@@ -4,10 +4,9 @@ import { useRouter } from "next/navigation";
 import { useRegister } from "@/context/RegisterContext";
 import LayoutRegister from "@/components/modules/authentication/register/LayoutRegister";
 import { PATHS } from "@/constants/paths";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { useAuthService } from "@/data/api/auth/authService";
 import { useState } from "react";
-import { handleLoginSuccess } from "@/utils/sessionHandlerUtils";
 import { TextField, Button, Divider, Typography } from "@mui/material";
 import { validatePassword } from "@/utils/validatePassword";
 
@@ -74,26 +73,21 @@ const StepOne = () => {
 
   return (
     <LayoutRegister>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            _handleRegisterGoogle(credentialResponse);
+            console.log("Google login successful:", credentialResponse);
+          }}
+          onError={() => console.log('Login Failed')}
+          useOneTap
+        />
       <form
         onSubmit={handleNext}
         className="space-y-4 bg-white px-6 py-2 rounded-xl w-full"
       >
         <h2 className="text-2xl font-semibold mb-2 text-center">Crea tu cuenta</h2>
 
-        <div className="flex justify-center items-center w-full">
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
-            <div className="w-full">
-              <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  _handleRegisterGoogle(credentialResponse);
-                  console.log("Google login successful:", credentialResponse);
-                }}
-                onError={() => console.log('Login Failed')}
-                useOneTap
-              />
-            </div>
-          </GoogleOAuthProvider>
-        </div>
+
         <Divider className="my-4">o</Divider>
 
 
