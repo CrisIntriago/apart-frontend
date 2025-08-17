@@ -87,14 +87,12 @@ const LoginPageContent = () => {
       <main className="w-full max-w-md px-6 text-center">
         <h2 className="text-2xl font-semibold mb-6">Inicia sesión</h2>
         
-        <div className="flex justify-center items-center w-full">
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
+        <div className="w-full">
               <GoogleLogin
                 onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
                 onError={() => console.log('Login Failed')}
                 useOneTap
               />
-          </GoogleOAuthProvider>
         </div>
 
         <form onSubmit={_handleLogin} className="space-y-4 flex flex-col items-center w-full">
