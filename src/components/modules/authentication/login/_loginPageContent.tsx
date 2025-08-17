@@ -89,13 +89,11 @@ const LoginPageContent = () => {
         
         <div className="flex justify-center items-center w-full">
           <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || ""}>
-            <div className="w-full">
               <GoogleLogin
                 onSuccess={(credentialResponse) => _handleLoginGoogle(credentialResponse)}
                 onError={() => console.log('Login Failed')}
                 useOneTap
               />
-            </div>
           </GoogleOAuthProvider>
         </div>
 
