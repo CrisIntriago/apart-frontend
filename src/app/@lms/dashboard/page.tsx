@@ -23,6 +23,10 @@ const DashboardPage = () => {
   const examsQuery = getExamsByCourseId(courseId ?? -1);
   const progressQuery = useCourseProgress(courseId ?? -1);
 
+  if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
+    return <LoaderComponent />;
+  }
+
   if (!userData?.has_access) {
     return (
       <div className="mt-10">
@@ -40,10 +44,6 @@ const DashboardPage = () => {
         </div>
       </main>
     );
-  }
-
-  if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
-    return <LoaderComponent />;
   }
 
   if (modulesQuery.error || progressQuery.error) {
