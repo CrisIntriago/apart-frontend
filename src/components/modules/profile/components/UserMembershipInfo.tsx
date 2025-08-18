@@ -48,7 +48,7 @@ const UserMembershipInfo = () => {
             )}
           </div>
           <p className="text-sm text-gray-500 mt-10 max-w-md text-center">
-            Gestiona tus pagos o actualiza tu información de suscripción en cualquier momento mediante el botón de PayPal.
+            Gestiona tus pagos o actualiza tu información de suscripción en cualquier momento mediante el botón de Stripe.
           </p>
         </>
       ) : (

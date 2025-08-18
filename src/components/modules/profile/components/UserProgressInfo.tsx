@@ -8,6 +8,7 @@ import flagPlaceholder from "@images/usa-flag.png";
 import { StudentProfile } from "@/types/user";
 import { PATHS } from "@/constants/paths";
 import { useCourseProgress } from "@/data/api/course/courseService";
+import { getImageUrl } from "@/utils/imageUtils";
 
 const UserProgressInfo = ({ user }: { user: StudentProfile | null }) => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const UserProgressInfo = ({ user }: { user: StudentProfile | null }) => {
           <div className="bg-[#3B3939] text-white rounded-lg p-4 w-full max-w-xs mx-auto text-center">
             <div className="flex items-center mb-2 justify-center">
               <Image
-                src={languageInfo?.language.icon || flagPlaceholder}
+                src={getImageUrl(languageInfo?.language.icon) || flagPlaceholder}
                 alt={`${languageInfo?.language.name} Flag`}
                 width={20}
                 height={15}
@@ -46,7 +47,7 @@ const UserProgressInfo = ({ user }: { user: StudentProfile | null }) => {
             <p className="text-xs mb-4">{courseInfo?.description}</p>
 
             <Image
-              src={courseInfo?.image || coursePlaceholder}
+              src={getImageUrl(courseInfo?.image) || coursePlaceholder}
               alt={`Imagen del curso ${courseInfo?.name}`}
               width={220}
               height={150}

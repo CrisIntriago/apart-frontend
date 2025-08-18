@@ -11,6 +11,7 @@ import { removeSessionStorageCookies } from "@/data/serverActions/authentication
 import { removeAccountState } from "@/data/store/accountStore";
 import { PATHS } from "@/constants/paths";
 import { useUser } from "@/context/UserContext";
+import { getImageUrl } from "@/utils/imageUtils";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -100,7 +101,7 @@ const Navbar = () => {
 
         <div className="w-8 h-8 rounded-full border-gray-700 overflow-hidden border">
           <Image
-            src={user?.photo || profileImage}
+            src={getImageUrl(user?.photo) || profileImage}
             alt={user ? `${user.first_name} ${user.last_name}` : "Foto de perfil"}
             width={32}
             height={32}

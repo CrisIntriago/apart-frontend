@@ -5,6 +5,7 @@ import personImage from "@images/default-profile.png";
 import { useCourseStudents } from "@/data/api/course/courseService";
 import { StudentProfile } from "@/types/user";
 import LoaderComponent from "@/components/ui/loaderComponent";
+import { getImageUrl } from "@/utils/imageUtils";
 
 const UserClassmatesInfo =  ({ user }: { user: StudentProfile | null }) => {
   const courseId = user?.course?.id;
@@ -31,7 +32,7 @@ const UserClassmatesInfo =  ({ user }: { user: StudentProfile | null }) => {
             className="bg-[#3C3939] text-white rounded-2xl shadow-lg p-4 flex flex-col items-center w-56 transition hover:scale-105"
           >
             <Image
-              src={classmate.photo || personImage}
+              src={getImageUrl(classmate.photo) || personImage}
               alt={`Foto de ${classmate.first_name} ${classmate.last_name}`}
               width={80}
               height={80}

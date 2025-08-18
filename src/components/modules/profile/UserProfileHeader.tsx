@@ -4,6 +4,7 @@ import { MapPin } from "lucide-react";
 import profileImage from "@images/default-profile.png";
 import { useUser } from "@/context/UserContext";
 import LoaderComponent from "@/components/ui/loaderComponent";
+import { getImageUrl } from "@/utils/imageUtils";
 
 const UserProfileHeader = ({
   activeSection,
@@ -31,7 +32,7 @@ const UserProfileHeader = ({
     <div className="bg-white rounded-xl px-4 sm:pl-20 flex flex-col items-start gap-4 py-5 drop-shadow-lg w-full">
       <div className="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start text-center sm:text-left gap-4 sm:gap-6 w-full">
         <Image
-          src={user.photo || profileImage}
+          src={getImageUrl(user.photo) || profileImage}
           alt={`${user.first_name} ${user.last_name}`}
           width={100}
           height={100}
