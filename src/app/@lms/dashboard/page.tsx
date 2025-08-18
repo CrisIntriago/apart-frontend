@@ -13,20 +13,19 @@ import OfferComponents from "@/components/modules/OfferComponents";
 
 const DashboardPage = () => {
   const { user: userData, isLoading: userLoading } = useUser();
-
-
-  if (userLoading) {
-    return <LoaderComponent />;
-  }
-
   const { getModulesByCourseId } = useModuleService();
   const { getExamsByCourseId } = useExamService();
 
+  // Estos valores pueden ser undefined si userLoading es true, pero los hooks deben llamarse siempre
   const courseId = userData?.course?.id;
   const courseName = userData?.course?.name ?? "Curso sin nombre";
   const modulesQuery = getModulesByCourseId(courseId ?? -1);
   const examsQuery = getExamsByCourseId(courseId ?? -1);
   const progressQuery = useCourseProgress(courseId ?? -1);
+
+  if (userLoading) {
+    return <LoaderComponent />;
+  }
 
   if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
     return <LoaderComponent />;
@@ -59,7 +58,7 @@ const DashboardPage = () => {
     );
   }
 
-  if (userLoading || modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
+  if (modulesQuery.isLoading || examsQuery.isLoading || progressQuery.isLoading) {
     return <LoaderComponent />;
   }
 
