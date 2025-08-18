@@ -159,39 +159,7 @@ const DashboardPage = () => {
                         </p>
                       </div>
 
-                      <span
-                      className={`ml-auto px-2 py-1 text-center text-xs font-semibold rounded z-10 ${
-                        isExam
-                          ? examBlocked
-                            ? "bg-green-200 text-green-800"
-                            : "bg-gray-200 text-gray-600"
-                          : moduleCompleted
-                            ? "bg-green-200 text-green-800"
-                            : "bg-gray-200 text-gray-600"
-                      }`}
-                    >
-                      {isExam ? (
-                        examBlocked ? (
-                          <>
-                            Completado
-                            <br />
-                            Puntaje: {Math.floor(Number(item.user_percentage))}/100
-                          </>
-                        ) : (
-                          <>
-                            Puntaje actual: {Math.floor(Number(item.user_percentage))}/100
-                            <br />
-                            {item.remaining_attempts}/{item.attempts_allowed} intentos
-                          </>
-                        )
-                      ) : (
-                        <>
-                          {moduleData
-                            ? `${moduleData.completed} de ${moduleData.total} correctas`
-                            : "Pendiente"}
-                        </>
-                      )}
-                    </span>
+                      <span className={ml-auto px-2 py-1 text-center text-xs font-semibold rounded z-10 ${isExam ? examBlocked ? "bg-green-200 text-green-800" : "bg-gray-200 text-gray-600" : moduleCompleted ? "bg-green-200 text-green-800" : "bg-gray-200 text-gray-600" }} > {isExam ? ( examBlocked ? ( <> Completado <br /> Puntaje: {Math.floor(Number(item.user_percentage))}/100 </> ) : ( <> Puntaje actual: {Math.floor(Number(item.user_percentage))}/100 <br /> {item.remaining_attempts}/{item.attempts_allowed} intentos </> ) ) : moduleCompleted ? ( "Completado" ) : ( "Pendiente" )} </span>
                       {!examBlocked && (
                         <Link
                           href={isExam ? `/exam/${item.id}` : `/module/${item.id}`}
