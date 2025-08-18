@@ -31,13 +31,15 @@ const UserProfileHeader = ({
   return (
     <div className="bg-white rounded-xl px-4 sm:pl-20 flex flex-col items-start gap-4 py-5 drop-shadow-lg w-full">
       <div className="flex flex-col sm:flex-row items-center sm:items-start justify-center sm:justify-start text-center sm:text-left gap-4 sm:gap-6 w-full">
-        <Image
-          src={getImageUrl(user.photo) || profileImage}
-          alt={`${user.first_name} ${user.last_name}`}
-          width={100}
-          height={100}
-          className="rounded-full object-cover mx-auto sm:mx-0"
-        />
+        <div className="w-[100px] h-[100px] rounded-full overflow-hidden flex-shrink-0">
+          <Image
+            src={getImageUrl(user.photo) || profileImage}
+            alt={`${user.first_name} ${user.last_name}`}
+            width={100}
+            height={100}
+            className="w-full h-full object-cover"
+          />
+        </div>
         <div>
           <h1 className="text-xl sm:text-2xl mt-2 sm:mt-4 font-bold text-gray-900">
             {user.first_name} {user.last_name}
