@@ -126,7 +126,7 @@ const DashboardPage = () => {
                   ? modulesProgress.find((m) => m.id === item.id)
                   : null;
                 const moduleCompleted =
-                  moduleData && moduleData.completed > 0; // ✅ ahora se pinta verde si completó al menos 1
+                  moduleData && moduleData.completed > 0;
                 const examBlocked = isExam && !item.has_attempts_left;
 
                 const CardContent = (
@@ -190,7 +190,7 @@ const DashboardPage = () => {
                             {Math.floor(Number(item.user_percentage))}/100
                             <br />
                             {item.remaining_attempts}/
-                            {item.attempts_allowed} intentos
+                            {item.attempts_allowed} intentos disponibles
                           </>
                         )
                       ) : moduleCompleted ? (
